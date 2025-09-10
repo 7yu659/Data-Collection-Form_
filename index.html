@@ -66,24 +66,9 @@
         display: flex;
     }
 
+    /* REMOVED: Logo is no longer in the header */
     .institution-logo-header {
-        width: 60px; /* নির্দিষ্ট সাইজ দেওয়া হলো */
-        height: 60px;
-        border-radius: 50%;
-        overflow: hidden;
-        border: 3px solid white;
-        flex-shrink: 0;
-        display: none; /* শুরুতে হিডেন থাকবে */
-    }
-
-    .institution-logo-header.active {
-        display: block; /* যখন ছবি থাকবে তখন দেখা যাবে */
-    }
-
-    .institution-logo-header img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        display: none;
     }
 
     .institution-details-header {
@@ -237,11 +222,10 @@
 
     .file-input-label {
         display: flex;
-        /* CHANGED: Switched to column layout for centered design */
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 10px; /* CHANGED: Adjusted gap for vertical layout */
+        gap: 10px;
         background-color: #f1f5f9;
         padding: 25px 20px;
         border-radius: var(--border-radius);
@@ -251,7 +235,7 @@
         position: relative;
         overflow: hidden;
         min-height: 110px;
-        text-align: center; /* CHANGED: Center align text */
+        text-align: center;
     }
 
     .file-input-label.dragover {
@@ -268,8 +252,6 @@
     .file-input-label .upload-text-container {
         display: flex;
         flex-direction: column;
-        /* CHANGED: Removed left alignment to inherit center from parent */
-        /* text-align: left; */
     }
 
     .file-input-label .upload-text {
@@ -284,15 +266,48 @@
         color: var(--light-text);
         margin-top: 2px;
     }
+    
+    .progress-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(241, 245, 249, 0.98);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        transition: opacity 0.3s ease;
+        z-index: 10;
+    }
+
+    .progress-bar-wrapper {
+        width: 100%;
+        height: 12px;
+        background-color: #e2e8f0;
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 10px;
+    }
 
     .progress-bar {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        height: 5px;
+        height: 100%;
         width: 0;
-        background-color: var(--success-color);
-        transition: width 1s ease-in-out;
+        background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        border-radius: 6px;
+        transition: width 0.3s ease;
+    }
+
+    .progress-bar.success {
+        background: var(--success-color);
+    }
+
+    .progress-text {
+        font-weight: 600;
+        font-size: 1rem;
+        color: var(--dark-text);
     }
 
     input[type="file"] {
@@ -331,6 +346,7 @@
         align-items: center;
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         transition: var(--transition);
+        z-index: 5;
     }
 
     .remove-image-btn:hover {
@@ -386,6 +402,7 @@
         padding: 30px;
         border-radius: var(--border-radius);
         box-shadow: var(--box-shadow);
+        margin-bottom: 30px;
     }
 
     .submission-count {
@@ -581,6 +598,129 @@
         opacity: 0.9;
         transform: translateY(-2px);
     }
+    
+    .institution-manager {
+        background-color: white;
+        padding: 30px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        margin-bottom: 30px;
+    }
+    .institution-manager h3 {
+        color: var(--primary-color);
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+    }
+    .current-institution-display {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1rem;
+        color: var(--light-text);
+    }
+    .current-institution-display strong {
+        color: var(--dark-text);
+        font-weight: 600;
+    }
+    .manage-institution-btn {
+        background: linear-gradient(to right, var(--accent-color), #d97706);
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: var(--transition);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 4px 6px rgba(249, 115, 22, 0.2);
+    }
+    .manage-institution-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px rgba(249, 115, 22, 0.25);
+    }
+    
+    #institutionManagerModal .institution-list-container {
+        list-style: none;
+        margin-bottom: 25px;
+        max-height: 250px;
+        overflow-y: auto;
+        border: 1px solid #e2e8f0;
+        border-radius: var(--border-radius);
+        padding: 10px;
+        background-color: #f8fafc;
+    }
+
+    /* --- MODIFIED: Minimal Institution Card Design --- */
+    .institution-card {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 10px;
+        background-color: white;
+        border: 1px solid #e2e8f0; /* Thinner border */
+        border-radius: var(--border-radius);
+        margin-bottom: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+    .institution-card:last-child {
+        margin-bottom: 0;
+    }
+    .institution-card:hover {
+        background-color: #f8fafc;
+        border-color: #cbd5e1;
+    }
+    .institution-card.active {
+        border-color: var(--primary-color);
+        background-color: #eff6ff; /* Lighter blue */
+    }
+    .institution-card-logo {
+        width: 45px;   /* Slightly smaller */
+        height: 45px;  /* Slightly smaller */
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+        background-color: #e2e8f0; /* Placeholder color */
+    }
+    .institution-card-details {
+        flex-grow: 1;
+        overflow: hidden;
+    }
+    .institution-card-name {
+        font-weight: 600;
+        color: var(--dark-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 1rem; /* Slightly smaller */
+    }
+    .institution-card-address {
+        font-size: 0.8rem; /* Slightly smaller */
+        color: var(--light-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #institutionManagerModal .add-new-institution-form {
+        margin-top: 15px;
+        border-top: 1px solid #e2e8f0;
+        padding-top: 20px;
+    }
+    #institutionManagerModal .add-new-institution-form h4 {
+        text-align: center;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+        color: var(--dark-text);
+    }
+    #institutionManagerModal .modal-btn.confirm {
+        width: 100%;
+    }
 
     /* Custom Toast/Popup */
     .toast-notification {
@@ -665,7 +805,9 @@
         to { transform: translateY(0); opacity: 1; }
     }
 
-    .modal-icon { font-size: 3rem; color: var(--delete-color); margin-bottom: 15px; }
+    .modal-icon { font-size: 3rem; margin-bottom: 15px; }
+    .modal-icon.fa-exclamation-triangle { color: var(--delete-color); }
+    .modal-icon.fa-check-circle { color: var(--success-color); }
     .modal-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; color: var(--dark-text); }
     .modal-message { margin-bottom: 25px; color: var(--light-text); line-height: 1.5; }
     .modal-buttons { display: flex; justify-content: center; gap: 15px; }
@@ -803,7 +945,7 @@
 
     @media (max-width: 768px) {
         .container { padding: 10px; }
-        .content-wrapper, .submission-info { padding: 20px; }
+        .content-wrapper, .submission-info, .institution-manager { padding: 20px; }
         .dynamic-header { flex-direction: column; text-align: center; gap: 15px; }
         .institution-details-header h1 { font-size: 1.5rem; }
         .details-content { flex-direction: column; }
@@ -864,11 +1006,50 @@
     </div>
 </div>
 
+<!-- File Size Error Modal -->
+<div class="modal" id="fileErrorModal">
+    <div class="modal-content">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-icon"><i class="fas fa-file-excel" style="color: var(--warning-color);"></i></div>
+        <h3 class="modal-title">ফাইল অনেক বড়</h3>
+        <p class="modal-message" id="fileErrorMessage">দুঃখিত, আপনার আপলোড করা ফাইলের সাইজ অনেক বড়। অনুগ্রহ করে ছোট সাইজের ফাইল আপলোড করুন।</p>
+        <div class="modal-buttons">
+            <button class="modal-btn confirm" id="uploadAgainBtn" style="background-color: var(--primary-color);">আবার চেষ্টা করুন</button>
+        </div>
+    </div>
+</div>
+
+<!-- Institution Manager Modal -->
+<div class="modal" id="institutionManagerModal">
+    <div class="modal-content" style="max-width: 550px;">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-icon"><i class="fas fa-sitemap" style="color: var(--primary-color);"></i></div>
+        <h3 class="modal-title">আপনার প্রতিষ্ঠানসমূহ</h3>
+        <p class="modal-message">একটি প্রতিষ্ঠান নির্বাচন করুন অথবা নতুন একটি তৈরি করুন।</p>
+        <div class="institution-list-container" id="institutionList">
+            <!-- Institution cards will be dynamically inserted here -->
+        </div>
+        <div class="add-new-institution-form">
+            <h4>নতুন প্রতিষ্ঠান যোগ করুন</h4>
+            <div class="form-group" style="text-align: left;">
+                <label for="newInstitutionName">নতুন প্রতিষ্ঠানের নাম:</label>
+                <input type="text" id="newInstitutionName" required>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn confirm" id="addNewInstitutionBtn" style="background-color: var(--success-color);">
+                    <i class="fas fa-plus-circle"></i> নতুন প্রতিষ্ঠান যোগ করুন
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="container hidden" id="mainContainer">
     <!-- Dynamic Institution Header -->
     <div class="dynamic-header" id="dynamicHeader">
         <div class="institution-logo-header" id="headerLogoContainer">
-            <img id="headerLogo" src="" alt="Institution Logo">
+             <!-- LOGO REMOVED FROM HERE -->
         </div>
         <div class="institution-details-header" id="institution-details-header">
             <!-- Content will be generated by JS -->
@@ -890,45 +1071,50 @@
                 <i class="fas fa-chevron-down"></i>
             </div>
             <div class="content" id="institution-content">
-                <div class="form-group">
+                <div class="form-group" data-field-id="institutionName">
                     <label for="institutionName">প্রতিষ্ঠানের নাম:</label>
                     <input type="text" id="institutionName" name="institutionName">
                 </div>
-                <div class="form-group">
+                <div class="form-group" data-field-id="institutionAddress">
                     <label for="institutionAddress">প্রতিষ্ঠানের ঠিকানা:</label>
                     <input type="text" id="institutionAddress" name="institutionAddress">
                 </div>
-                <div class="form-group">
+                <div class="form-group" data-field-id="institutionNumber">
                     <label for="institutionNumber">প্রতিষ্ঠানের ফোন নম্বর:</label>
                     <input type="tel" id="institutionNumber" name="institutionNumber">
                 </div>
-                <div class="form-group">
+                <div class="form-group" data-field-id="institutionLogo">
                     <label for="institutionLogo">প্রতিষ্ঠানের লোগো:</label>
                     <label class="file-input-label" for="institutionLogoInput" id="logoFileDropArea">
+                        <div class="progress-container hidden">
+                            <div class="progress-bar-wrapper">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <span class="progress-text">0%</span>
+                        </div>
                         <i class="fas fa-cloud-arrow-up upload-icon"></i>
                         <div class="upload-text-container">
                             <span class="upload-text">অর্জিনাল ফাইল আপলোড করুন</span>
                             <span class="upload-formats">Ai, SVG, PNG, JPG</span>
                         </div>
-                        <div class="progress-bar" id="logoProgressBar"></div>
                     </label>
                     <input type="file" id="institutionLogoInput" name="institutionLogo" accept=".ai,.svg,.png,.jpg,image/*">
-                    <p class="file-upload-notice">প্রিন্টের কাজে ব্যবহার করার জন্য Ai অথবা SVG ফাইল দিলে সবচেয়ে বেশি ভালো হবে।</p>
+                    <p class="file-upload-notice">প্রিন্টের কাজে ব্যবহৃত করার জন্য Ai , SVG ফাইল দিলে সবচেয়ে বেশি ভালো হবে।</p>
                     <div class="image-preview-container hidden" id="logoPreviewContainer">
                          <img id="logoPreview" src="#" alt="Logo Preview">
                          <button class="remove-image-btn" id="removeLogoBtn">&times;</button>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" data-field-id="institutionAdvice">
                     <label for="institutionAdvice">উপদেশ বা বাণী:</label>
                     <textarea id="institutionAdvice" name="institutionAdvice"></textarea>
                 </div>
-                <div class="form-group">
+                <div class="form-group" data-field-id="institutionConclusion">
                     <label for="institutionConclusion">কি সমাপনী:</label>
                     <textarea id="institutionConclusion" name="institutionConclusion"></textarea>
                 </div>
                 <button type="button" id="saveInstitutionBtn" class="submit-button" style="background: linear-gradient(to right, var(--accent-color), #d97706); margin-top: 10px;">
-                    <i class="fas fa-building-shield"></i> তথ্য সেভ করুন
+                    <i class="fas fa-building-shield"></i> প্রতিষ্ঠানের তথ্য সেভ করুন
                 </button>
             </div>
         </div>
@@ -936,40 +1122,32 @@
         <!-- Main Form -->
         <form id="data-collection-form">
             <input type="hidden" id="edit-id" value="">
-            <div class="form-group">
-                <label for="studentName">শিক্ষার্থীর নাম:<span class="required-star">*</span></label>
-                <input type="text" id="studentName" name="studentName" class="lang-input" required>
-            </div>
-            <div class="form-group">
-                <label for="fatherName">পিতার নাম:<span class="required-star">*</span></label>
-                <input type="text" id="fatherName" name="fatherName" class="lang-input" required>
-            </div>
-            <div class="form-group">
-                <label for="studentAddress">ঠিকানা:<span class="required-star">*</span></label>
-                <input type="text" id="studentAddress" name="studentAddress" class="lang-input" required>
-            </div>
-            <div class="form-group">
-                <label for="studentMobile">মোবাইল নম্বর:</label>
-                <input type="tel" id="studentMobile" name="studentMobile" class="lang-input-num">
-            </div>
 
-            <div class="form-group">
+            <div id="dynamic-form-fields">
+                <!-- DYNAMIC STUDENT FIELDS WILL BE RENDERED HERE -->
+            </div>
+            
+            <div class="form-group" data-field-id="studentPhoto">
                 <label for="studentPhoto">শিক্ষার্থীর ছবি:</label>
                 <label class="file-input-label" for="studentPhotoInput" id="photoFileDropArea">
+                     <div class="progress-container hidden">
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar"></div>
+                        </div>
+                        <span class="progress-text">0%</span>
+                    </div>
                     <i class="fas fa-cloud-arrow-up upload-icon"></i>
                     <div class="upload-text-container">
                         <span class="upload-text">ছবি আপলোড করুন</span>
-                        <span class="upload-formats">PNG, JPG, SVG</span>
+                        <span class="upload-formats">PNG, JPG</span>
                     </div>
-                    <div class="progress-bar" id="photoProgressBar"></div>
                 </label>
-                <input type="file" id="studentPhotoInput" name="studentPhoto" accept=".png,.jpg,.jpeg,image/*">
+                <input type="file" id="studentPhotoInput" name="studentPhoto" accept=".png,.jpg,.jpeg,image/png,image/jpeg">
                 <div class="image-preview-container hidden" id="photoPreviewContainer">
                      <img id="photoPreview" src="#" alt="Student Photo Preview">
                      <button type="button" class="remove-image-btn" id="removePhotoBtn">&times;</button>
                 </div>
             </div>
-
 
             <button type="submit" class="submit-button" id="submit-button">
                 <i class="fas fa-save"></i> তথ্য সংরক্ষণ করুন
@@ -992,6 +1170,17 @@
             </div>
         </div>
     </div>
+    
+    <div class="institution-manager">
+        <h3>আপনার প্রতিষ্ঠান পরিচালনা করুন</h3>
+        <div class="current-institution-display">
+            বর্তমানে নির্বাচিত: <strong id="currentInstitutionName">N/A</strong>
+        </div>
+        <button id="openInstitutionManagerBtn" class="manage-institution-btn">
+            <i class="fas fa-exchange-alt"></i> প্রতিষ্ঠান পরিবর্তন/যোগ করুন
+        </button>
+    </div>
+
 </div>
 
 <!-- Footer -->
@@ -1018,14 +1207,13 @@
 <!-- FIREBASE SDKs -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
-<!-- IMAGE COMPRESSION LIBRARY (Added for performance) -->
+<!-- IMAGE COMPRESSION LIBRARY -->
 <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Firebase ইনিশিয়ালাইজেশন ---
+    // --- Firebase Initialization ---
     const firebaseConfig = {
         apiKey: "AIzaSyD9BwVMQy5lX63-Lnsy_8oBw4rfoROp4Ec",
         authDomain: "data-collection-app-c055e.firebaseapp.com",
@@ -1037,9 +1225,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const storage = firebase.storage();
 
-    // DOM Elements
+    // --- DOM Elements ---
     const mainContainer = document.getElementById('mainContainer');
     const loginModal = document.getElementById('loginModal');
     const loginBtn = document.getElementById('loginBtn');
@@ -1059,10 +1246,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const toastContainer = document.getElementById('toast-container');
     const form = document.getElementById('data-collection-form');
     const allModalCloseBtns = document.querySelectorAll('.modal-close-btn');
+    const fileErrorModal = document.getElementById('fileErrorModal');
+    const fileErrorMessage = document.getElementById('fileErrorMessage');
+    const uploadAgainBtn = document.getElementById('uploadAgainBtn');
+    const institutionManagerModal = document.getElementById('institutionManagerModal');
+    const openInstitutionManagerBtn = document.getElementById('openInstitutionManagerBtn');
+    const addNewInstitutionBtn = document.getElementById('addNewInstitutionBtn');
+    const editIdInput = document.getElementById('edit-id');
+    const submitButton = document.getElementById('submit-button');
 
-    // Storage and State
+    // --- State and Storage ---
     const userLoginKey = 'userInfo_permanent';
     const languageKey = 'app_language';
+    const currentInstitutionKey = 'current_institution_id';
     let confirmAction = null;
     let institutionLogoUrl = null;
     let studentPhotoUrl = null;
@@ -1070,23 +1266,73 @@ document.addEventListener('DOMContentLoaded', () => {
     let studentPhotoUploadPromise = null;
     let submissions = [];
     let isHistoryExpanded = false;
-    const VISIBLE_ITEMS_LIMIT = 4;
+    const VISIBLE_ITEMS_LIMIT = 2;
+    let activeFileInput = null;
+    let userInstitutions = [];
+    // --- MODIFIED: Unified configuration object ---
+    let formConfiguration = {
+        institutionFields: [],
+        studentFields: []
+    };
+
+    const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dggkvls21/image/upload';
+    const CLOUDINARY_UPLOAD_PRESET = 'my_preset';
 
     // --- Core App Logic ---
-    function initApp() {
+    async function initApp() {
         if (localStorage.getItem(userLoginKey)) {
             mainContainer.classList.remove('hidden');
             loginModal.classList.remove('active');
-            loadAllData();
+            await loadUserAndInstitutionData();
         } else {
             loginModal.classList.add('active');
         }
         applyLanguageRestriction(localStorage.getItem(languageKey) || 'bn');
     }
 
+    async function loadUserAndInstitutionData() {
+        const userInfo = JSON.parse(localStorage.getItem(userLoginKey));
+        const userDocRef = db.collection('users').doc(userInfo.number);
+        const userDoc = await userDocRef.get();
+
+        if (userDoc.exists && userDoc.data().accessibleInstitutions) {
+            userInstitutions = userDoc.data().accessibleInstitutions;
+            let currentId = localStorage.getItem(currentInstitutionKey);
+            if (!currentId || !userInstitutions.some(inst => inst.id === currentId)) {
+                currentId = userInstitutions.length > 0 ? userInstitutions[0].id : null;
+                if (currentId) {
+                   localStorage.setItem(currentInstitutionKey, currentId);
+                } else {
+                   localStorage.removeItem(currentInstitutionKey);
+                }
+            }
+        } else {
+            const legacyInstitutionId = userInfo.number;
+            const legacyInstDoc = await db.collection('institutions').doc(legacyInstitutionId).get();
+            const legacyName = legacyInstDoc.exists ? legacyInstDoc.data().name : 'আমার প্রথম প্রতিষ্ঠান';
+            
+            userInstitutions = [{ id: legacyInstitutionId, name: legacyName }];
+            
+            await userDocRef.set({
+                name: userInfo.name,
+                accessibleInstitutions: userInstitutions
+            }, { merge: true });
+
+            localStorage.setItem(currentInstitutionKey, legacyInstitutionId);
+        }
+        await loadAllData();
+    }
+
+
     async function loadAllData() {
-        await loadInstitutionInfo();
-        await loadSubmissions();
+        const institutionId = localStorage.getItem(currentInstitutionKey);
+        if (!institutionId) {
+            showToast('কোনো প্রতিষ্ঠান নির্বাচন করা নেই। অনুগ্রহ করে একটি প্রতিষ্ঠান যোগ করুন।', 'error');
+            return;
+        }
+        await loadInstitutionInfo(institutionId);
+        await loadFormConfiguration(institutionId);
+        await loadSubmissions(institutionId);
     }
 
     // --- Toast Notification ---
@@ -1100,7 +1346,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 500);
-        }, 4000); // Increased duration for processing message
+        }, 4000);
     }
 
     // --- Login/Logout Logic ---
@@ -1113,6 +1359,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const userRef = db.collection('users').doc(number);
                 await userRef.set({ name: name, lastLogin: new Date() }, { merge: true });
+
                 localStorage.setItem(userLoginKey, JSON.stringify({ name, number }));
                 initApp();
             } catch (error) {
@@ -1128,245 +1375,265 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     logoutBtn.addEventListener('click', () => {
-        confirmTitle.textContent = 'লগ আউট নিশ্চিত করুন';
-        confirmMessage.textContent = 'আপনি কি নিশ্চিতভাবে লগ আউট করতে চান?';
-        modalConfirm.textContent = 'হ্যাঁ, লগ আউট';
-        confirmationModal.classList.add('active');
-        confirmAction = { type: 'logout' };
+        showConfirmationModal({
+            title: 'লগ আউট নিশ্চিত করুন',
+            message: 'আপনি কি নিশ্চিতভাবে লগ আউট করতে চান?',
+            confirmText: 'হ্যাঁ, লগ আউট',
+            action: { type: 'logout' }
+        });
     });
 
-    // --- Image Uploader Setup ---
-    function setupImageUploader(inputId, dropAreaId, progressBarId, previewContainerId, previewImgId, removeBtnId, storagePath, onUrlReady, setUploadPromise) {
+    // --- Image Uploader (Unchanged) ---
+    function setupImageUploader(inputId, dropAreaId, previewContainerId, previewImgId, removeBtnId, onUrlReady, setUploadPromise, config) {
         const input = document.getElementById(inputId);
         const dropArea = document.getElementById(dropAreaId);
-        const progressBar = document.getElementById(progressBarId);
         const previewContainer = document.getElementById(previewContainerId);
         const previewImg = document.getElementById(previewImgId);
         const removeBtn = document.getElementById(removeBtnId);
+        const progressContainer = dropArea.querySelector('.progress-container');
+        const progressBar = dropArea.querySelector('.progress-bar');
+        const progressText = dropArea.querySelector('.progress-text');
 
-        const handleFile = async (file) => { // <<< ফাংশনটিকে async করা হলো
-            if (!file || !file.type.startsWith('image/')) {
-                showToast('দয়া করে একটি ইমেজ ফাইল আপলোড করুন।', 'error');
+        const handleFile = async (file) => {
+            if (!file) return;
+            activeFileInput = input;
+            const maxSizeMB = file.type === 'image/jpeg' || file.type === 'image/png' ? config.maxSizeJPG : config.maxSizeOther;
+            const maxSizeBytes = maxSizeMB * 1024 * 1024;
+            if (file.size > maxSizeBytes) {
+                fileErrorMessage.textContent = `দুঃখিত, ফাইলের সর্বোচ্চ সাইজ ${maxSizeMB}MB। আপনার ফাইলের সাইজ ${(file.size / 1024 / 1024).toFixed(2)} MB।`;
+                fileErrorModal.classList.add('active');
                 return;
             }
-
-            setUploadPromise(null);
-            onUrlReady(null);
-            
-            // --- ছবির সাইজ কমানোর অপশন (নতুন যুক্ত করা হয়েছে) ---
-            const options = {
-                maxSizeMB: 1,
-                maxWidthOrHeight: 1024,
-                useWebWorker: true,
-            };
-
+            setUploadPromise(null); onUrlReady(null);
             let processedFile = file;
-            try {
-                // শুধুমাত্র 1MB এর বড় ফাইল কম্প্রেস করা হবে
-                if (file.size > 1024 * 1024) { 
-                    showToast('বড় ছবি প্রসেস করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...', 'success');
-                    processedFile = await imageCompression(file, options);
-                }
-            } catch (error) {
-                console.error('Image compression error:', error);
-                showToast('ছবিটি প্রসেস করা সম্ভব হয়নি।', 'error');
-                return;
+            if (file.type.startsWith('image/') && file.size > 1024 * 1024) {
+                try {
+                    showToast('ছবি প্রসেস করা হচ্ছে, অপেক্ষা করুন...', 'success');
+                    processedFile = await imageCompression(file, { maxSizeMB: 1, maxWidthOrHeight: 1280, useWebWorker: true });
+                } catch (error) { console.error('Image compression error:', error); }
             }
-            // --- কম্প্রেস করার অংশ শেষ ---
-
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previewImg.src = e.target.result;
-                previewContainer.classList.remove('hidden');
-                dropArea.classList.add('hidden');
-            };
-            reader.readAsDataURL(processedFile); // কম্প্রেস করা ফাইল প্রিভিউতে দেখানো হচ্ছে
-
-            const userInfo = JSON.parse(localStorage.getItem(userLoginKey));
-            if (!userInfo) {
-                showToast('অনুগ্রহ করে আবার লগইন করুন।', 'error');
-                return;
-            }
-
-            const fullPath = `${storagePath}/${userInfo.number}/${new Date().getTime()}_${processedFile.name}`;
-            const storageRef = storage.ref(fullPath);
-            const uploadTask = storageRef.put(processedFile); // কম্প্রেস করা ফাইল আপলোড করা হচ্ছে
-
+            progressContainer.classList.remove('hidden'); progressBar.style.width = '0%'; progressBar.classList.remove('success'); progressText.textContent = '0%';
             const uploadPromise = new Promise((resolve, reject) => {
-                uploadTask.on('state_changed',
-                    (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        progressBar.style.width = progress + '%';
-                    },
-                    (error) => {
-                        console.error("Upload failed:", error);
-                        showToast('ছবি আপলোড করা সম্ভব হয়নি।', 'error');
-                        progressBar.style.width = '0%';
-                        onUrlReady(null);
-                        setUploadPromise(null);
-                        reject(error);
-                    },
-                    async () => {
-                        try {
-                            const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-                            onUrlReady(downloadURL);
-                            showToast('ছবি সফলভাবে আপলোড হয়েছে।', 'success');
-                            setTimeout(() => { progressBar.style.width = '0%'; }, 1000);
-                            resolve(downloadURL);
-                        } catch (e) {
-                            reject(e);
-                        }
+                const formData = new FormData();
+                formData.append('file', processedFile); formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', CLOUDINARY_URL, true);
+                xhr.upload.onprogress = (event) => {
+                    if (event.lengthComputable) {
+                        const percentComplete = Math.round((event.loaded / event.total) * 100);
+                        progressBar.style.width = percentComplete + '%'; progressText.textContent = percentComplete + '%';
                     }
-                );
+                };
+                xhr.onload = () => {
+                    if (xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        onUrlReady(response.secure_url);
+                        progressBar.classList.add('success'); progressText.textContent = 'সফলভাবে সম্পন্ন!';
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            previewImg.src = e.target.result;
+                            previewContainer.classList.remove('hidden'); dropArea.classList.add('hidden');
+                        };
+                        reader.readAsDataURL(processedFile);
+                        setTimeout(() => {
+                            progressContainer.classList.add('hidden');
+                            showToast('ছবি সফলভাবে আপলোড হয়েছে।', 'success'); resolve(response.secure_url);
+                        }, 1500);
+                    } else {
+                        showToast('ছবি আপলোড করা সম্ভব হয়নি।', 'error'); progressContainer.classList.add('hidden'); onUrlReady(null); reject(new Error('Upload failed'));
+                    }
+                };
+                xhr.onerror = () => {
+                    showToast('নেটওয়ার্ক সমস্যার কারণে আপলোড ব্যর্থ হয়েছে।', 'error'); progressContainer.classList.add('hidden'); onUrlReady(null); reject(new Error('Network error'));
+                };
+                xhr.send(formData);
             });
             setUploadPromise(uploadPromise);
         };
-
-
         input.addEventListener('change', (e) => handleFile(e.target.files[0]));
         dropArea.addEventListener('dragover', (e) => { e.preventDefault(); dropArea.classList.add('dragover'); });
         dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
-        dropArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropArea.classList.remove('dragover');
-            handleFile(e.dataTransfer.files[0]);
-        });
-        removeBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            previewContainer.classList.add('hidden');
-            dropArea.classList.remove('hidden');
-            input.value = '';
-            onUrlReady(null);
-            setUploadPromise(null);
-        });
+        dropArea.addEventListener('drop', (e) => { e.preventDefault(); dropArea.classList.remove('dragover'); handleFile(e.dataTransfer.files[0]); });
+        removeBtn.addEventListener('click', (e) => { e.preventDefault(); previewContainer.classList.add('hidden'); dropArea.classList.remove('hidden'); input.value = ''; onUrlReady(null); setUploadPromise(null); });
     }
+    uploadAgainBtn.addEventListener('click', () => { fileErrorModal.classList.remove('active'); if(activeFileInput) { activeFileInput.click(); } });
 
-    // --- Institution Info Logic ---
+    // --- Institution Info Logic (Unchanged) ---
     const institutionNameInput = document.getElementById('institutionName');
     const institutionAddressInput = document.getElementById('institutionAddress');
     const institutionNumberInput = document.getElementById('institutionNumber');
     const institutionAdviceInput = document.getElementById('institutionAdvice');
     const institutionConclusionInput = document.getElementById('institutionConclusion');
     const saveInstitutionBtn = document.getElementById('saveInstitutionBtn');
-
     function updateHeaderUI(info) {
         const headerDetailsContainer = document.getElementById('institution-details-header');
-        const headerLogoContainer = document.getElementById('headerLogoContainer');
-        const headerLogo = document.getElementById('headerLogo');
         const dynamicHeader = document.getElementById('dynamicHeader');
         const formTitleHeader = document.getElementById('formTitleHeader');
         const formSubtitle = document.getElementById('formSubtitle');
-
-        const name = info.name || '';
-        if (name) {
+        const currentInstitutionNameEl = document.getElementById('currentInstitutionName');
+        const name = info.name || 'নামবিহীন প্রতিষ্ঠান';
+        currentInstitutionNameEl.textContent = name;
+        if (info.name) {
             headerDetailsContainer.innerHTML = `<h1>${name}</h1><p>${info.address || ''}</p><p>${info.number ? `ফোন: ${info.number}` : ''}</p>`;
-            if (info.logoUrl) {
-                headerLogo.src = info.logoUrl;
-                headerLogoContainer.classList.add('active');
-            } else {
-                headerLogoContainer.classList.remove('active');
-            }
-            dynamicHeader.classList.add('active');
-            formTitleHeader.classList.add('hidden');
-            formSubtitle.classList.remove('hidden');
+            dynamicHeader.classList.add('active'); formTitleHeader.classList.add('hidden'); formSubtitle.classList.remove('hidden');
         } else {
-            dynamicHeader.classList.remove('active');
-            formTitleHeader.classList.remove('hidden');
-            formSubtitle.classList.add('hidden');
+            dynamicHeader.classList.remove('active'); formTitleHeader.classList.remove('hidden'); formSubtitle.classList.add('hidden');
         }
     }
-
-    async function loadInstitutionInfo() {
-        const userInfo = JSON.parse(localStorage.getItem(userLoginKey));
-        if (!userInfo) return;
-        const docRef = db.collection('institutions').doc(userInfo.number);
+    async function loadInstitutionInfo(institutionId) {
+        if (!institutionId) return;
+        const docRef = db.collection('institutions').doc(institutionId);
         try {
             const doc = await docRef.get();
             if (doc.exists) {
                 const info = doc.data();
-                institutionNameInput.value = info.name || '';
-                institutionAddressInput.value = info.address || '';
-                // FIXED: Convert number back to English digits for the input field
+                institutionNameInput.value = info.name || ''; institutionAddressInput.value = info.address || '';
                 institutionNumberInput.value = info.number ? convertToEnglishDigits(info.number) : '';
-                institutionAdviceInput.value = info.advice || '';
-                institutionConclusionInput.value = info.conclusion || '';
+                institutionAdviceInput.value = info.advice || ''; institutionConclusionInput.value = info.conclusion || '';
                 institutionLogoUrl = info.logoUrl || null;
                 if (institutionLogoUrl) {
                     document.getElementById('logoPreview').src = institutionLogoUrl;
                     document.getElementById('logoPreviewContainer').classList.remove('hidden');
                     document.getElementById('logoFileDropArea').classList.add('hidden');
+                } else {
+                    document.getElementById('logoPreviewContainer').classList.add('hidden');
+                    document.getElementById('logoFileDropArea').classList.remove('hidden');
+                    document.getElementById('institutionLogoInput').value = '';
                 }
                 updateHeaderUI(info);
+            } else {
+                institutionNameInput.value = ''; institutionAddressInput.value = ''; institutionNumberInput.value = '';
+                institutionAdviceInput.value = ''; institutionConclusionInput.value = ''; institutionLogoUrl = null;
+                document.getElementById('logoPreviewContainer').classList.add('hidden');
+                document.getElementById('logoFileDropArea').classList.remove('hidden');
+                document.getElementById('institutionLogoInput').value = '';
+                updateHeaderUI({ name: 'নতুন প্রতিষ্ঠান' });
             }
-        } catch(error) {
-            console.error("Error loading institution info: ", error);
-            showToast('প্রতিষ্ঠানের তথ্য লোড করা সম্ভব হয়নি।', 'error');
+        } catch(error) { console.error("Error loading institution info: ", error); showToast('প্রতিষ্ঠানের তথ্য লোড করা সম্ভব হয়নি।', 'error'); }
+    }
+    saveInstitutionBtn.addEventListener('click', async () => {
+        const institutionId = localStorage.getItem(currentInstitutionKey);
+        if (!institutionId) return;
+        saveInstitutionBtn.disabled = true; saveInstitutionBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> সেভ হচ্ছে...`;
+        try {
+            if (institutionLogoUploadPromise) { await institutionLogoUploadPromise; }
+            const currentLang = localStorage.getItem(languageKey) || 'bn';
+            const newName = institutionNameInput.value.trim();
+            const institutionData = {
+                name: newName, address: institutionAddressInput.value.trim(),
+                number: convertDigits(institutionNumberInput.value.trim(), currentLang),
+                advice: institutionAdviceInput.value.trim(), conclusion: institutionConclusionInput.value.trim(), logoUrl: institutionLogoUrl
+            };
+            await db.collection('institutions').doc(institutionId).set(institutionData, { merge: true });
+            const userInfo = JSON.parse(localStorage.getItem(userLoginKey));
+            const userDocRef = db.collection('users').doc(userInfo.number);
+            const userDoc = await userDocRef.get();
+            if (userDoc.exists && userDoc.data().accessibleInstitutions) {
+                let updatedInstitutions = userDoc.data().accessibleInstitutions.map(inst => inst.id === institutionId ? { ...inst, name: newName } : inst);
+                await userDocRef.update({ accessibleInstitutions: updatedInstitutions });
+                userInstitutions = updatedInstitutions;
+            }
+            updateHeaderUI(institutionData); institutionLogoUploadPromise = null;
+            showToast('প্রতিষ্ঠানের তথ্য সফলভাবে সেভ হয়েছে!', 'success');
+        } catch(error) { console.error("Error saving institution info:", error); showToast('তথ্য সেভ করতে সমস্যা হয়েছে।', 'error');
+        } finally { saveInstitutionBtn.disabled = false; saveInstitutionBtn.innerHTML = `<i class="fas fa-building-shield"></i> প্রতিষ্ঠানের তথ্য সেভ করুন`; }
+    });
+    setupImageUploader('institutionLogoInput', 'logoFileDropArea', 'logoPreviewContainer', 'logoPreview', 'removeLogoBtn', (url) => { institutionLogoUrl = url; }, (promise) => { institutionLogoUploadPromise = promise; }, { maxSizeJPG: 10, maxSizeOther: 30 });
+    setupImageUploader('studentPhotoInput', 'photoFileDropArea', 'photoPreviewContainer', 'photoPreview', 'removePhotoBtn', (url) => { studentPhotoUrl = url; }, (promise) => { studentPhotoUploadPromise = promise; }, { maxSizeJPG: 6, maxSizeOther: 6 });
+
+    // --- MODIFIED: Dynamic Form Logic for ALL Fields ---
+    async function loadFormConfiguration(institutionId) {
+        const docRef = db.collection('institutions').doc(institutionId);
+        try {
+            const doc = await docRef.get();
+            const data = doc.data();
+
+            if (doc.exists && data && data.formConfiguration) {
+                formConfiguration = data.formConfiguration;
+            } else {
+                // Default configuration if none is set in the database, including backward compatibility
+                formConfiguration = {
+                    institutionFields: [
+                        { id: "institutionName", label: "প্রতিষ্ঠানের নাম:", enabled: true },
+                        { id: "institutionAddress", label: "প্রতিষ্ঠানের ঠিকানা:", enabled: true },
+                        { id: "institutionNumber", label: "প্রতিষ্ঠানের ফোন নম্বর:", enabled: true },
+                        { id: "institutionLogo", label: "প্রতিষ্ঠানের লোগো:", enabled: true },
+                        { id: "institutionAdvice", label: "উপদেশ বা বাণী:", enabled: true },
+                        { id: "institutionConclusion", label: "কি সমাপনী:", enabled: true }
+                    ],
+                    studentFields: data && data.formFields ? data.formFields : [ // Check for old 'formFields'
+                        { id: "studentName", label: "শিক্ষার্থীর নাম", type: "text", enabled: true, required: true, order: 1 },
+                        { id: "fatherName", label: "পিতার নাম", type: "text", enabled: true, required: true, order: 2 },
+                        { id: "studentAddress", label: "ঠিকানা", type: "text", enabled: true, required: true, order: 3 },
+                        { id: "studentMobile", label: "মোবাইল নম্বর", type: "tel", enabled: true, required: false, order: 4 },
+                        { id: "studentPhoto", label: "শিক্ষার্থীর ছবি", type: "file", enabled: true, required: false, order: 5 }
+                    ]
+                };
+                // Ensure studentPhoto is in the config if not present in old config
+                if (!formConfiguration.studentFields.some(f => f.id === 'studentPhoto')) {
+                    formConfiguration.studentFields.push({ id: "studentPhoto", label: "শিক্ষার্থীর ছবি", type: "file", enabled: true, required: false, order: 99 });
+                }
+            }
+            renderAllControlledFields();
+        } catch (error) {
+            console.error("Error loading form configuration:", error);
+            showToast('ফরম লোড করতে সমস্যা হয়েছে।', 'error');
         }
     }
 
-    saveInstitutionBtn.addEventListener('click', async () => {
-        const userInfo = JSON.parse(localStorage.getItem(userLoginKey));
-        if (!userInfo) return;
-
-        saveInstitutionBtn.disabled = true;
-        saveInstitutionBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> সেভ হচ্ছে...`;
-
-        try {
-            if (institutionLogoUploadPromise) {
-                await institutionLogoUploadPromise;
+    function renderAllControlledFields() {
+        // --- Control visibility of Institution Fields ---
+        formConfiguration.institutionFields.forEach(field => {
+            const fieldElement = document.querySelector(`.form-group[data-field-id="${field.id}"]`);
+            if (fieldElement) {
+                fieldElement.classList.toggle('hidden', !field.enabled);
             }
+        });
 
-            const currentLang = localStorage.getItem(languageKey) || 'bn';
-
-            const institutionData = {
-                name: institutionNameInput.value.trim(),
-                address: institutionAddressInput.value.trim(),
-                number: convertDigits(institutionNumberInput.value.trim(), currentLang),
-                advice: institutionAdviceInput.value.trim(),
-                conclusion: institutionConclusionInput.value.trim(),
-                logoUrl: institutionLogoUrl
-            };
-
-            await db.collection('institutions').doc(userInfo.number).set(institutionData, { merge: true });
-            updateHeaderUI(institutionData);
-            institutionLogoUploadPromise = null;
-            showToast('প্রতিষ্ঠানের তথ্য সফলভাবে সেভ হয়েছে!', 'success');
-        } catch(error) {
-            console.error("Error saving institution info:", error);
-            showToast('তথ্য সেভ করতে সমস্যা হয়েছে।', 'error');
-        } finally {
-            saveInstitutionBtn.disabled = false;
-            saveInstitutionBtn.innerHTML = `<i class="fas fa-building-shield"></i> প্রতিষ্ঠানের তথ্য সেভ করুন`;
+        // --- Control visibility of Student Photo Field ---
+        const studentPhotoField = formConfiguration.studentFields.find(f => f.id === 'studentPhoto');
+        const studentPhotoElement = document.querySelector('.form-group[data-field-id="studentPhoto"]');
+        if (studentPhotoElement) {
+             studentPhotoElement.classList.toggle('hidden', !studentPhotoField || !studentPhotoField.enabled);
         }
-    });
 
-    setupImageUploader('institutionLogoInput', 'logoFileDropArea', 'logoProgressBar', 'logoPreviewContainer', 'logoPreview', 'removeLogoBtn', 'logos',
-        (url) => { institutionLogoUrl = url; },
-        (promise) => { institutionLogoUploadPromise = promise; }
-    );
+        // --- Dynamically render other Student Fields ---
+        const container = document.getElementById('dynamic-form-fields');
+        container.innerHTML = ''; // Clear previous fields
+        
+        const studentTextFields = formConfiguration.studentFields.filter(f => f.id !== 'studentPhoto');
+        const sortedFields = [...studentTextFields].sort((a, b) => a.order - b.order);
 
-    // --- Student Info Logic ---
-    const studentNameInput = document.getElementById('studentName');
-    const fatherNameInput = document.getElementById('fatherName');
-    const studentAddressInput = document.getElementById('studentAddress');
-    const studentMobileInput = document.getElementById('studentMobile');
-    const editIdInput = document.getElementById('edit-id');
-    const submitButton = document.getElementById('submit-button');
+        sortedFields.forEach(field => {
+            if (!field.enabled) return;
 
-    setupImageUploader('studentPhotoInput', 'photoFileDropArea', 'photoProgressBar', 'photoPreviewContainer', 'photoPreview', 'removePhotoBtn', 'student_photos',
-        (url) => { studentPhotoUrl = url; },
-        (promise) => { studentPhotoUploadPromise = promise; }
-    );
+            const requiredStar = field.required ? '<span class="required-star">*</span>' : '';
+            const requiredAttr = field.required ? 'required' : '';
+            const inputClass = field.type === 'tel' ? 'lang-input-num' : 'lang-input';
 
-    async function loadSubmissions() {
-        const userInfo = JSON.parse(localStorage.getItem(userLoginKey));
-        if (!userInfo) return;
+            const fieldHtml = `
+                <div class="form-group" data-field-id="${field.id}">
+                    <label for="${field.id}">${field.label}:${requiredStar}</label>
+                    <input type="${field.type}" id="${field.id}" name="${field.id}" class="${inputClass}" ${requiredAttr}>
+                </div>
+            `;
+            container.innerHTML += fieldHtml;
+        });
+        
+        applyLanguageRestriction(localStorage.getItem(languageKey) || 'bn');
+    }
+
+    // --- Student Info Logic (ADAPTED for dynamic fields) ---
+    async function loadSubmissions(institutionId) {
+        if (!institutionId) return;
         try {
-            const snapshot = await db.collection('institutions').doc(userInfo.number).collection('students').orderBy('timestamp', 'desc').get();
+            const snapshot = await db.collection('institutions').doc(institutionId).collection('students').orderBy('timestamp', 'desc').get();
             submissions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             renderHistory();
         } catch (error) {
             console.error("Error loading submissions: ", error);
+            submissions = [];
+            renderHistory();
             showToast('শিক্ষার্থীদের তালিকা লোড করা যায়নি।', 'error');
         }
     }
@@ -1375,32 +1642,40 @@ document.addEventListener('DOMContentLoaded', () => {
         const historyListElement = document.getElementById('historyList');
         const toggleViewBtn = document.getElementById('toggleViewBtn');
         const countText = document.getElementById('countText');
-
         const currentLang = localStorage.getItem(languageKey) || 'bn';
         countText.textContent = `মোট সংরক্ষিত তথ্য: ${convertDigits(submissions.length, currentLang)}`;
-
         historyListElement.innerHTML = '';
         if (submissions.length === 0) {
             historyListElement.innerHTML = '<li style="text-align:center; color: var(--light-text); padding: 20px 0;"><i class="fas fa-info-circle"></i> কোনো তথ্য এখনো সংরক্ষিত হয়নি।</li>';
             toggleViewBtn.classList.add('hidden');
             return;
         }
-
         const itemsToRender = isHistoryExpanded ? submissions : submissions.slice(0, VISIBLE_ITEMS_LIMIT);
         itemsToRender.forEach((sub) => {
             const date = sub.timestamp ? sub.timestamp.toDate() : new Date();
             const formattedDate = `${date.toLocaleDateString('bn-BD')} ${date.toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' })}`;
             const photoHtml = sub.studentPhotoUrl ? `<img src="${sub.studentPhotoUrl}" alt="Photo" class="student-photo-history">` : `<div class="student-photo-history" style="background: #f1f5f9; display:flex; align-items:center; justify-content:center;"><i class="fas fa-user" style="font-size: 2rem; color: #cbd5e1;"></i></div>`;
-            const mobile = sub.studentMobile ? convertDigits(sub.studentMobile, currentLang) : 'N/A';
+            
+            let detailsHtml = '';
+            const studentNameField = formConfiguration.studentFields.find(f => f.id === 'studentName');
+            const displayName = studentNameField ? sub[studentNameField.id] || 'N/A' : 'N/A';
+
+            const sortedFields = [...formConfiguration.studentFields].sort((a, b) => a.order - b.order);
+            sortedFields.forEach(field => {
+                if (!field.enabled || !sub[field.id] || field.type === 'file') return;
+                let value = sub[field.id];
+                if (field.type === 'tel') {
+                    value = convertDigits(value, currentLang);
+                }
+                detailsHtml += `<p><strong>${field.label}:</strong> ${value}</p>`;
+            });
 
             const listItem = document.createElement('li');
             listItem.className = 'submission-item';
             listItem.innerHTML = `
-                <div class="item-header"><strong>${sub.studentName||'N/A'}</strong><i class="fas fa-chevron-down arrow-icon"></i></div>
+                <div class="item-header"><strong>${displayName}</strong><i class="fas fa-chevron-down arrow-icon"></i></div>
                 <div class="item-details"><div class="details-content">${photoHtml}<div class="details-text">
-                    <p><strong>পিতার নাম:</strong> ${sub.fatherName||'N/A'}</p>
-                    <p><strong>ঠিকানা:</strong> ${sub.studentAddress||'N/A'}</p>
-                    <p><strong>মোবাইল:</strong> ${mobile}</p>
+                    ${detailsHtml}
                     <p><strong>তারিখ:</strong> ${formattedDate}</p>
                     <div class="item-actions">
                         <button class="edit-btn" data-edit-id="${sub.id}"><i class="fas fa-edit"></i> সম্পাদনা</button>
@@ -1408,11 +1683,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div></div></div></div>`;
             historyListElement.appendChild(listItem);
         });
-
         historyListElement.querySelectorAll('.item-header').forEach(h => h.addEventListener('click', e => !e.target.closest('button') && h.parentElement.classList.toggle('active')));
         historyListElement.querySelectorAll('.edit-btn').forEach(b => b.addEventListener('click', handleEditClick));
         historyListElement.querySelectorAll('.delete-btn').forEach(b => b.addEventListener('click', handleDeleteClick));
-
         if (submissions.length > VISIBLE_ITEMS_LIMIT) {
             toggleViewBtn.classList.remove('hidden');
             const remaining = convertDigits(String(submissions.length - VISIBLE_ITEMS_LIMIT), currentLang);
@@ -1428,11 +1701,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const sub = submissions.find(s => s.id === studentId);
         if (!sub) return;
 
-        studentNameInput.value = sub.studentName || '';
-        fatherNameInput.value = sub.fatherName || '';
-        studentAddressInput.value = sub.studentAddress || '';
-        // FIXED: Convert number back to English digits for the input field
-        studentMobileInput.value = sub.studentMobile ? convertToEnglishDigits(sub.studentMobile) : '';
+        formConfiguration.studentFields.forEach(field => {
+            if (field.enabled && field.type !== 'file') {
+                const inputElement = document.getElementById(field.id);
+                if (inputElement) {
+                    let value = sub[field.id] || '';
+                    if (field.type === 'tel') { value = convertToEnglishDigits(value); }
+                    inputElement.value = value;
+                }
+            }
+        });
 
         studentPhotoUrl = sub.studentPhotoUrl || null;
         if (studentPhotoUrl) {
@@ -1442,7 +1720,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             resetPhotoUploader();
         }
-
         editIdInput.value = studentId;
         submitButton.innerHTML = '<i class="fas fa-sync-alt"></i> তথ্য আপডেট করুন';
         submitButton.classList.add('update');
@@ -1452,23 +1729,28 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleDeleteClick(event) {
         event.stopPropagation();
         const studentId = event.currentTarget.dataset.deleteId;
-        confirmTitle.textContent = 'আপনি কি নিশ্চিত';
-        confirmMessage.textContent = 'আপনি কি নিশ্চিত যে আপনি এই তথ্যটি মুছতে চান? এই কাজটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না।';
-        modalConfirm.textContent = 'হ্যাঁ, মুছুন';
-        confirmationModal.classList.add('active');
-        confirmAction = { type: 'delete', id: studentId };
+        showConfirmationModal({
+            title: 'আপনি কি নিশ্চিত',
+            message: 'আপনি কি নিশ্চিত যে আপনি এই তথ্যটি মুছতে চান? এই কাজটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না।',
+            confirmText: 'হ্যাঁ, মুছুন',
+            action: { type: 'delete', id: studentId }
+        });
     }
 
     function resetPhotoUploader() {
-        studentPhotoUrl = null;
-        studentPhotoUploadPromise = null;
+        studentPhotoUrl = null; studentPhotoUploadPromise = null;
         document.getElementById('photoPreviewContainer').classList.add('hidden');
         document.getElementById('photoFileDropArea').classList.remove('hidden');
         document.getElementById('studentPhotoInput').value = '';
     }
 
     function resetFormState() {
-        form.reset();
+        formConfiguration.studentFields.forEach(field => {
+            if (field.enabled && field.type !== 'file') {
+                const input = document.getElementById(field.id);
+                if (input) input.value = '';
+            }
+        });
         editIdInput.value = '';
         resetPhotoUploader();
         submitButton.innerHTML = '<i class="fas fa-save"></i> তথ্য সংরক্ষণ করুন';
@@ -1477,43 +1759,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const userInfo = JSON.parse(localStorage.getItem(userLoginKey));
-        if (!userInfo) { showToast('দয়া করে আবার লগইন করুন।', 'error'); return; }
-
+        const institutionId = localStorage.getItem(currentInstitutionKey);
+        if (!institutionId) { showToast('দয়া করে একটি প্রতিষ্ঠান নির্বাচন করুন।', 'error'); return; }
         submitButton.disabled = true;
         const isUpdating = editIdInput.value !== '';
         submitButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${isUpdating ? 'আপডেট হচ্ছে...' : 'সংরক্ষণ হচ্ছে...'}`;
-
-        const studentId = isUpdating ? editIdInput.value : db.collection('institutions').doc(userInfo.number).collection('students').doc().id;
-
+        const studentId = isUpdating ? editIdInput.value : db.collection('institutions').doc(institutionId).collection('students').doc().id;
         try {
-            if (studentPhotoUploadPromise) {
-                await studentPhotoUploadPromise;
-            }
-
+            if (studentPhotoUploadPromise) { await studentPhotoUploadPromise; }
+            
+            const formData = {};
             const currentLang = localStorage.getItem(languageKey) || 'bn';
+            formConfiguration.studentFields.forEach(field => {
+                 if (field.enabled && field.type !== 'file') {
+                    const inputElement = document.getElementById(field.id);
+                    if (inputElement) {
+                        let value = inputElement.value.trim();
+                        if (field.type === 'tel') { value = convertDigits(value, currentLang); }
+                        formData[field.id] = value;
+                    }
+                }
+            });
 
-            const formData = {
-                studentName: studentNameInput.value.trim(),
-                fatherName: fatherNameInput.value.trim(),
-                studentAddress: studentAddressInput.value.trim(),
-                studentMobile: convertDigits(studentMobileInput.value.trim(), currentLang),
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                studentPhotoUrl: studentPhotoUrl
-            };
+            formData.timestamp = firebase.firestore.FieldValue.serverTimestamp();
+            formData.studentPhotoUrl = studentPhotoUrl;
             
             if (isUpdating && formData.studentPhotoUrl === null) {
                 const existingSub = submissions.find(s => s.id === studentId);
                 formData.studentPhotoUrl = existingSub.studentPhotoUrl || null;
             }
-
-
-            const studentDocRef = db.collection('institutions').doc(userInfo.number).collection('students').doc(studentId);
+            const studentDocRef = db.collection('institutions').doc(institutionId).collection('students').doc(studentId);
             await (isUpdating ? studentDocRef.update(formData) : studentDocRef.set(formData));
             
             studentPhotoUploadPromise = null;
             showToast(isUpdating ? 'তথ্য সফলভাবে আপডেট হয়েছে!' : 'তথ্য সফলভাবে সংরক্ষিত হয়েছে!');
-            await loadSubmissions();
+            await loadSubmissions(institutionId);
             resetFormState();
         } catch (error) {
             console.error("Form submission error:", error);
@@ -1528,30 +1808,138 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Modal, Language and Helper Functions ---
+    // --- Institution Management Logic (MODIFIED for new flow) ---
+    openInstitutionManagerBtn.addEventListener('click', async () => {
+        const institutionListEl = document.getElementById('institutionList');
+        const currentId = localStorage.getItem(currentInstitutionKey);
+        institutionListEl.innerHTML = '<p style="text-align:center;">লোড হচ্ছে...</p>';
+        const institutionPromises = userInstitutions.map(inst => db.collection('institutions').doc(inst.id).get());
+        const institutionDocs = await Promise.all(institutionPromises);
+        institutionListEl.innerHTML = '';
+        institutionDocs.forEach(doc => {
+            if (!doc.exists) return;
+            const instData = doc.data(); const card = document.createElement('div');
+            card.className = 'institution-card'; card.dataset.id = doc.id;
+            if (doc.id === currentId) { card.classList.add('active'); }
+            const logoUrl = instData.logoUrl || `https://via.placeholder.com/45/1a56db/ffffff?text=${(instData.name || 'N').charAt(0)}`;
+            card.innerHTML = `
+                <img src="${logoUrl}" alt="Logo" class="institution-card-logo">
+                <div class="institution-card-details">
+                    <div class="institution-card-name" title="${instData.name || 'নাম নেই'}">${instData.name || 'নাম নেই'}</div>
+                    <div class="institution-card-address" title="${instData.address || 'ঠিকানা নেই'}">${instData.address || 'ঠিকানা নেই'}</div>
+                </div>`;
+            card.addEventListener('click', () => switchInstitution(doc.id));
+            institutionListEl.appendChild(card);
+        });
+        institutionManagerModal.classList.add('active');
+    });
+    async function switchInstitution(newId) {
+        localStorage.setItem(currentInstitutionKey, newId);
+        institutionManagerModal.classList.remove('active');
+        showToast('প্রতিষ্ঠান পরিবর্তন করা হয়েছে।', 'success');
+        await loadAllData();
+        resetFormState();
+    }
+    addNewInstitutionBtn.addEventListener('click', async () => {
+        const newName = document.getElementById('newInstitutionName').value.trim();
+        if (!newName) { showToast('অনুগ্রহ করে নতুন প্রতিষ্ঠানের নাম দিন।', 'error'); return; }
+        addNewInstitutionBtn.disabled = true; addNewInstitutionBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> যোগ হচ্ছে...`;
+        try {
+            const newInstitutionRef = db.collection('institutions').doc();
+            await newInstitutionRef.set({ name: newName, address: '', number: '', advice: '', conclusion: '', logoUrl: null });
+            const newInstitution = { id: newInstitutionRef.id, name: newName };
+            const userInfo = JSON.parse(localStorage.getItem(userLoginKey));
+            const userDocRef = db.collection('users').doc(userInfo.number);
+            userInstitutions.push(newInstitution);
+            await userDocRef.update({ accessibleInstitutions: userInstitutions });
+            document.getElementById('newInstitutionName').value = '';
+            
+            // --- NEW: Success popup flow ---
+            showConfirmationModal({
+                iconClass: 'fas fa-check-circle',
+                title: 'অভিনন্দন!',
+                message: 'আপনার নতুন প্রতিষ্ঠান সফলভাবে যোগ হয়েছে। প্রতিষ্ঠান সম্পর্কিত সকল তথ্য পূরণ করুন।',
+                confirmText: 'তথ্য পূরণ করুন',
+                confirmBtnClass: 'success', // Optional: for styling
+                cancelBtnHidden: true,
+                action: { 
+                    type: 'guideToInstitutionForm', 
+                    newId: newInstitution.id 
+                }
+            });
+
+        } catch (error) {
+            console.error("Error adding new institution: ", error); showToast('নতুন প্রতিষ্ঠান যোগ করতে সমস্যা হয়েছে।', 'error');
+        } finally {
+            addNewInstitutionBtn.disabled = false; addNewInstitutionBtn.innerHTML = `<i class="fas fa-plus-circle"></i> নতুন প্রতিষ্ঠান যোগ করুন`;
+        }
+    });
+
+    // --- Modal, Language and Helper Functions (MODIFIED) ---
+    function showConfirmationModal(options) {
+        const { title, message, confirmText, action, iconClass, cancelBtnHidden } = options;
+        const iconElement = confirmationModal.querySelector('.modal-icon i');
+        
+        confirmTitle.textContent = title;
+        confirmMessage.textContent = message;
+        modalConfirm.textContent = confirmText;
+        
+        // Reset icon and button classes
+        iconElement.className = iconClass || 'fas fa-exclamation-triangle';
+        modalConfirm.style.backgroundColor = ''; // Reset to default
+        modalCancel.classList.remove('hidden');
+
+        if (cancelBtnHidden) {
+            modalCancel.classList.add('hidden');
+        }
+        if (options.confirmBtnClass === 'success') {
+            modalConfirm.style.backgroundColor = 'var(--success-color)';
+        }
+
+        confirmationModal.classList.add('active');
+        confirmAction = action;
+    }
+
+    modalConfirm.addEventListener('click', async () => {
+        if (!confirmAction) return;
+        
+        confirmationModal.classList.remove('active'); // Close modal first
+        
+        if (confirmAction.type === 'logout') {
+            localStorage.removeItem(userLoginKey); localStorage.removeItem(currentInstitutionKey); window.location.reload();
+        } else if (confirmAction.type === 'delete') {
+            const institutionId = localStorage.getItem(currentInstitutionKey);
+            try {
+                await db.collection('institutions').doc(institutionId).collection('students').doc(confirmAction.id).delete();
+                showToast('তথ্য সফলভাবে মুছে ফেলা হয়েছে।');
+                if (editIdInput.value === confirmAction.id) resetFormState();
+                await loadSubmissions(institutionId);
+            } catch(error) { console.error("Delete error: ", error); showToast('তথ্য মুছতে সমস্যা হয়েছে।', 'error'); }
+        } else if (confirmAction.type === 'guideToInstitutionForm') {
+            await switchInstitution(confirmAction.newId);
+            institutionInfoSection.scrollIntoView({ behavior: 'smooth' });
+            if (!institutionContent.classList.contains('active')) {
+                institutionContent.classList.add('active');
+                institutionHeaderEl.classList.add('active');
+            }
+        }
+        confirmAction = null;
+    });
+
     function convertDigits(numberStr, targetLang) {
         if (!numberStr) return '';
         const en = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
         const bn = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
         const ar = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
         const toDigits = (targetLang === 'bn') ? bn : (targetLang === 'ar') ? ar : en;
-        
-        // First, convert any local digits to English to standardize
         const englishStr = convertToEnglishDigits(numberStr);
-
         let converted = '';
         for (let char of englishStr) {
             const index = en.indexOf(char);
-            if (index !== -1) {
-                converted += toDigits[index];
-            } else {
-                converted += char; // Keep non-digit characters as they are
-            }
+            if (index !== -1) { converted += toDigits[index]; } else { converted += char; }
         }
         return converted;
     }
-
-    // ADDED: New helper function to fix number loading issues
     function convertToEnglishDigits(numberStr) {
         if (!numberStr) return '';
         const en = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
@@ -1559,81 +1947,42 @@ document.addEventListener('DOMContentLoaded', () => {
         const ar = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
         let converted = '';
         for (let char of String(numberStr)) {
-            const bnIndex = bn.indexOf(char);
-            const arIndex = ar.indexOf(char);
-            if (bnIndex !== -1) {
-                converted += en[bnIndex];
-            } else if (arIndex !== -1) {
-                converted += en[arIndex];
-            } else {
-                converted += char;
-            }
+            const bnIndex = bn.indexOf(char); const arIndex = ar.indexOf(char);
+            if (bnIndex !== -1) { converted += en[bnIndex];
+            } else if (arIndex !== -1) { converted += en[arIndex];
+            } else { converted += char; }
         }
         return converted;
     }
-
-
     function applyLanguageRestriction(lang) {
         const langConfig = {
-            'bn': { textRegex: /[^ঀ-৿\s.,-]/g },
-            'en': { textRegex: /[^a-zA-Z0-9\s.,-]/g },
-            'ar': { textRegex: /[^ء-ي\s.,-]/g }
+            'bn': { textRegex: /[^ঀ-৿\s.,-]/g }, 'en': { textRegex: /[^a-zA-Z0-9\s.,-]/g }, 'ar': { textRegex: /[^ء-ي\s.,-]/g }
         };
         const config = langConfig[lang] || langConfig['bn'];
         document.querySelectorAll('.lang-input').forEach(input => input.oninput = () => input.value = input.value.replace(config.textRegex, ''));
         document.querySelectorAll('.lang-input-num').forEach(input => input.oninput = () => input.value = input.value.replace(/[^0-9]/g, ''));
         if (mainContainer.classList.contains('hidden') === false) renderHistory();
     }
-
     document.getElementById('setLangBengali').addEventListener('click', () => setLanguage('bn'));
     document.getElementById('setLangEnglish').addEventListener('click', () => setLanguage('en'));
     document.getElementById('setLangArabic').addEventListener('click', () => setLanguage('ar'));
-
     function setLanguage(lang) {
         localStorage.setItem(languageKey, lang);
         applyLanguageRestriction(lang);
         languageModal.classList.remove('active');
         showToast({bn: 'ভাষা বাংলায় পরিবর্তন করা হয়েছে।', en: 'Language changed to English.', ar: 'تم تغيير اللغة إلى العربية.'}[lang]);
     }
-
-    modalConfirm.addEventListener('click', async () => {
-        if (!confirmAction) return;
-        if (confirmAction.type === 'logout') {
-            localStorage.removeItem(userLoginKey);
-            window.location.reload();
-        } else if (confirmAction.type === 'delete') {
-            const userInfo = JSON.parse(localStorage.getItem(userLoginKey));
-            try {
-                await db.collection('institutions').doc(userInfo.number).collection('students').doc(confirmAction.id).delete();
-                showToast('তথ্য সফলভাবে মুছে ফেলা হয়েছে।');
-                if (editIdInput.value === confirmAction.id) resetFormState();
-                await loadSubmissions();
-            } catch(error) {
-                console.error("Delete error: ", error);
-                showToast('তথ্য মুছতে সমস্যা হয়েছে।', 'error');
-            }
-        }
-        confirmationModal.classList.remove('active');
-        confirmAction = null;
-    });
-
     institutionHeaderEl.addEventListener('click', () => {
-        institutionContent.classList.toggle('active');
-        institutionHeaderEl.classList.toggle('active');
+        institutionContent.classList.toggle('active'); institutionHeaderEl.classList.toggle('active');
     });
-
     document.addEventListener('click', (e) => {
         if (institutionContent.classList.contains('active') && !institutionInfoSection.contains(e.target)) {
-            institutionContent.classList.remove('active');
-            institutionHeaderEl.classList.remove('active');
+            institutionContent.classList.remove('active'); institutionHeaderEl.classList.remove('active');
         }
     });
-
     document.getElementById('toggleViewBtn').addEventListener('click', () => {
-        isHistoryExpanded = !isHistoryExpanded;
-        renderHistory();
+        isHistoryExpanded = !isHistoryExpanded; renderHistory();
     });
-
     allModalCloseBtns.forEach(btn => btn.addEventListener('click', () => btn.closest('.modal').classList.remove('active')));
     modalCancel.addEventListener('click', () => confirmationModal.classList.remove('active'));
     languageBtn.addEventListener('click', () => languageModal.classList.add('active'));
@@ -1643,5 +1992,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 </body>
-
 </html>
