@@ -62,7 +62,14 @@
     .item-header strong,
     .modal-title,
     #institutionManagerModal .add-new-item-form h4,
-    .details-text p strong {
+    .details-text p strong,
+    /* --- পরিবর্তন: জন্ম তারিখের পপআপে বর্ণমালা ফন্ট যুক্ত করা হয়েছে --- */
+    #datePickerModal .modal-content,
+    #datePickerModal .datepicker-header,
+    #datePickerModal .calendar-day-name,
+    #datePickerModal .calendar-day,
+    #datePickerModal .month-item,
+    #datePickerModal .year-item {
         font-family: 'Bornomala', sans-serif;
     }
 
@@ -73,7 +80,7 @@
     .form-subtitle,
     .upload-text,
     .upload-formats,
-    .footer-content h4 { /* --- পরিবর্তন: ফুটারে 'Hind Siliguri' ফন্ট যুক্ত করা হয়েছে --- */
+    .footer-content h4 {
         font-family: 'Hind Siliguri', sans-serif;
     }
 
@@ -252,6 +259,13 @@
         background-color: white;
     }
 
+    /* --- NEW: Curosr for readonly fields --- */
+    .form-group input[readonly] {
+        cursor: pointer;
+        background-color: #f8fafc;
+    }
+
+
     .form-group input:focus, .form-group textarea:focus {
         border-color: var(--primary-color);
         box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.15);
@@ -411,6 +425,7 @@
         font-size: 0.85rem;
         margin-top: 10px;
         text-align: center;
+        transition: opacity 0.3s ease;
     }
 
     /* Buttons */
@@ -1054,6 +1069,24 @@
         padding: 8px 15px;
         font-size: 0.95rem;
     }
+
+    /* --- NEW: Login input with icon --- */
+    .input-with-icon {
+        position: relative;
+    }
+    .input-with-icon .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--light-text);
+        font-size: 0.9rem;
+    }
+    .input-with-icon input {
+        padding-left: 40px !important;
+    }
+
+
     #loginModal .form-group label {
         font-size: 1rem; /* Slightly smaller label */
         margin-bottom: 6px;
@@ -1090,6 +1123,144 @@
     #languageModal .modal-btn { width: 100%; background-color: var(--light-bg); color: var(--dark-text); }
     #languageModal .modal-btn:hover { background-color: var(--primary-color); color: white; }
 
+    /* --- NEW: Blood Group Modal Styles --- */
+    #bloodGroupModal .modal-content {
+        max-width: 500px;
+    }
+    .blood-group-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+    }
+    .blood-group-btn {
+        padding: 20px 10px;
+        border: 2px solid var(--light-bg);
+        border-radius: var(--border-radius);
+        background-color: white;
+        color: var(--dark-text);
+        font-size: 1.5rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: var(--transition);
+        font-family: Arial, sans-serif;
+    }
+    /* --- পরিবর্তন: রক্তের গ্রুপের হোভার ইফেক্ট লাল করা হয়েছে --- */
+    .blood-group-btn:hover {
+        border-color: var(--danger-color);
+        background-color: var(--danger-bg-soft);
+        color: var(--danger-color);
+        transform: translateY(-3px);
+        box-shadow: var(--box-shadow);
+    }
+
+    /* --- পরিবর্তন: জন্ম তারিখের পপআপের সম্পূর্ণ নতুন স্টাইল --- */
+    #datePickerModal .modal-content {
+        max-width: 380px;
+        padding: 20px;
+        overflow: hidden;
+    }
+    
+    /* --- পরিবর্তন: ডেট পিকারের ক্লোজ বাটন লুকানো হয়েছে --- */
+    #datePickerModal .modal-close-btn {
+        display: none;
+    }
+
+    .datepicker-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: var(--border-radius);
+        position: relative; /* Back button positioning */
+    }
+
+    /* --- পরিবর্তন: নতুন ব্যাক বাটন স্টাইল --- */
+    .datepicker-back-btn {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 5px;
+    }
+    .datepicker-back-btn:hover {
+        opacity: 0.8;
+    }
+
+    .datepicker-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+    .calendar-grid, .month-grid, .year-grid {
+        display: grid;
+        gap: 5px;
+    }
+    .calendar-grid {
+        grid-template-columns: repeat(7, 1fr);
+    }
+    .calendar-day-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-align: center;
+        color: var(--light-text);
+    }
+    .calendar-day, .month-item, .year-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: background-color 0.2s, color 0.2s, transform 0.2s;
+        font-weight: 500;
+        border: 1px solid transparent;
+    }
+    .calendar-day {
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+    }
+    .month-item, .year-item {
+        padding: 12px 8px;
+        font-size: 1.05rem;
+    }
+    .calendar-day.other-month {
+        color: #ccc;
+        cursor: default;
+    }
+    
+    /* --- পরিবর্তন: হোভার ইফেক্ট পরিবর্তন করা হয়েছে --- */
+    .calendar-day:not(.other-month):hover, .month-item:hover, .year-item:hover {
+        background-color: var(--primary-color);
+        color: white;
+        transform: scale(1.05);
+    }
+    .calendar-day.selected, .month-item.selected, .year-item.selected {
+        background-color: var(--primary-color);
+        color: white !important;
+        border-color: var(--primary-color);
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(26, 86, 219, 0.3);
+    }
+    .month-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+    .year-grid {
+        grid-template-columns: repeat(4, 1fr);
+        max-height: 250px;
+        overflow-y: auto;
+        padding-right: 5px;
+        gap: 8px;
+    }
+
+
     @media (max-width: 768px) {
         .container { padding: 10px; }
         .content-wrapper, .submission-info, .institution-manager { padding: 20px; }
@@ -1113,11 +1284,19 @@
 
         <div class="form-group">
             <label for="loginName">আপনার নাম:</label>
-            <input type="text" id="loginName" required>
+            <!-- NEW: Input with icon wrapper -->
+            <div class="input-with-icon">
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" id="loginName" required>
+            </div>
         </div>
         <div class="form-group">
             <label for="loginNumber">আপনার ফোন নম্বর:</label>
-            <input type="tel" id="loginNumber" required>
+            <!-- NEW: Input with icon wrapper -->
+            <div class="input-with-icon">
+                <i class="fas fa-phone input-icon"></i>
+                <input type="tel" id="loginNumber" required>
+            </div>
         </div>
         <div class="modal-buttons">
             <button class="modal-btn confirm" id="loginBtn">প্রবেশ করুন</button>
@@ -1208,6 +1387,35 @@
     </div>
 </div>
 
+<!-- NEW: Blood Group Selector Modal -->
+<div class="modal" id="bloodGroupModal">
+    <div class="modal-content">
+        <button class="modal-close-btn" data-modal-id="bloodGroupModal">&times;</button>
+        <h3 class="modal-title">রক্তের গ্রুপ নির্বাচন করুন</h3>
+        <div class="blood-group-grid">
+            <button class="blood-group-btn" data-group="A+">A+</button>
+            <button class="blood-group-btn" data-group="A-">A-</button>
+            <button class="blood-group-btn" data-group="B+">B+</button>
+            <button class="blood-group-btn" data-group="B-">B-</button>
+            <button class="blood-group-btn" data-group="O+">O+</button>
+            <button class="blood-group-btn" data-group="O-">O-</button>
+            <button class="blood-group-btn" data-group="AB+">AB+</button>
+            <button class="blood-group-btn" data-group="AB-">AB-</button>
+        </div>
+    </div>
+</div>
+
+<!-- NEW: Date Picker Modal -->
+<div class="modal" id="datePickerModal">
+    <div class="modal-content">
+        <!-- The close button is now hidden via CSS -->
+        <button class="modal-close-btn" data-modal-id="datePickerModal">&times;</button>
+        <div id="datePickerContainer">
+            <!-- Date picker will be rendered here by JS -->
+        </div>
+    </div>
+</div>
+
 
 <div class="container hidden" id="mainContainer">
     <!-- Dynamic Institution Header -->
@@ -1242,12 +1450,12 @@
                         <div class="validation-message">অনুগ্রহ করে প্রতিষ্ঠানের নাম লিখুন।</div>
                     </div>
                     <div class="form-group" data-field-id="institutionAddress">
-                        <label for="institutionAddress">প্রতিষ্ঠানের ঠিকানা:<span class="required-star">*</span></label>
+                        <label for="institutionAddress">প্রতিষ্ঠানের ঠিকানা:</label>
                         <input type="text" id="institutionAddress" name="institutionAddress">
                         <div class="validation-message">অনুগ্রহ করে প্রতিষ্ঠানের ঠিকানা লিখুন।</div>
                     </div>
                     <div class="form-group" data-field-id="institutionNumber">
-                        <label for="institutionNumber">প্রতিষ্ঠানের ফোন নম্বর:<span class="required-star">*</span></label>
+                        <label for="institutionNumber">প্রতিষ্ঠানের ফোন নম্বর:</label>
                         <input type="tel" id="institutionNumber" name="institutionNumber">
                         <div class="validation-message">অনুগ্রহ করে ফোন নম্বর লিখুন।</div>
                     </div>
@@ -1436,6 +1644,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const addInstitutionBtn = document.getElementById('addInstitutionBtn');
     const addClassBtn = document.getElementById('addClassBtn');
     const managerListContainer = document.getElementById('managerListContainer');
+    const bloodGroupModal = document.getElementById('bloodGroupModal');
+    const datePickerModal = document.getElementById('datePickerModal');
+    const datePickerContainer = document.getElementById('datePickerContainer');
 
 
     // --- State and Storage ---
@@ -1459,6 +1670,14 @@ document.addEventListener('DOMContentLoaded', () => {
         studentFields: []
     };
     let isInstitutionInfoSaved = false;
+
+    // --- পরিবর্তন: জন্ম তারিখ পপআপের নতুন স্টেট ---
+    let datePickerState = {
+        currentView: 'day', // 'day', 'month', 'year'
+        displayDate: new Date(),
+        selectedDate: { day: null, month: null, year: null }
+    };
+
 
     const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dggkvls21/image/upload';
     const CLOUDINARY_UPLOAD_PRESET = 'my_preset';
@@ -1618,6 +1837,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- পরিবর্তন: ফাইল সাইজ ফরম্যাট করার জন্য নতুন ফাংশন ---
+    function formatBytes(bytes, decimals = 2) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+
     // --- Image Uploader ---
     function setupImageUploader(inputId, dropAreaId, previewContainerId, previewImgId, removeBtnId, onUrlReady, setUploadPromise, config) {
         const input = document.getElementById(inputId);
@@ -1628,6 +1857,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const progressContainer = dropArea.querySelector('.progress-container');
         const progressBar = dropArea.querySelector('.progress-bar');
         const progressText = dropArea.querySelector('.progress-text');
+        const noticeElement = dropArea.closest('.form-group').querySelector('.file-upload-notice');
+
 
         const handleFile = async (file) => {
             if (!file) return;
@@ -1656,7 +1887,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 xhr.upload.onprogress = (event) => {
                     if (event.lengthComputable) {
                         const percentComplete = Math.round((event.loaded / event.total) * 100);
-                        progressBar.style.width = percentComplete + '%'; progressText.textContent = percentComplete + '%';
+                        progressBar.style.width = percentComplete + '%';
+                        // --- পরিবর্তন: আপলোডের বিস্তারিত তথ্য দেখানো হচ্ছে ---
+                        progressText.textContent = `${percentComplete}% (${formatBytes(event.loaded)} / ${formatBytes(event.total)})`;
                     }
                 };
                 xhr.onload = () => {
@@ -1667,7 +1900,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         const reader = new FileReader();
                         reader.onload = (e) => {
                             previewImg.src = e.target.result;
-                            previewContainer.classList.remove('hidden'); dropArea.classList.add('hidden');
+                            previewContainer.classList.remove('hidden'); 
+                            dropArea.classList.add('hidden');
+                            // --- পরিবর্তন: প্রিভিউ দেখানোর পর নোটিশ লুকানো হচ্ছে ---
+                            if(noticeElement) noticeElement.classList.add('hidden');
                         };
                         reader.readAsDataURL(processedFile);
                         setTimeout(() => {
@@ -1689,7 +1925,16 @@ document.addEventListener('DOMContentLoaded', () => {
         dropArea.addEventListener('dragover', (e) => { e.preventDefault(); dropArea.classList.add('dragover'); });
         dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
         dropArea.addEventListener('drop', (e) => { e.preventDefault(); dropArea.classList.remove('dragover'); handleFile(e.dataTransfer.files[0]); });
-        removeBtn.addEventListener('click', (e) => { e.preventDefault(); previewContainer.classList.add('hidden'); dropArea.classList.remove('hidden'); input.value = ''; onUrlReady(null); setUploadPromise(null); });
+        removeBtn.addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            previewContainer.classList.add('hidden'); 
+            dropArea.classList.remove('hidden'); 
+            input.value = ''; 
+            onUrlReady(null); 
+            setUploadPromise(null); 
+            // --- পরিবর্তন: ছবি সরানোর পর নোটিশ আবার দেখানো হচ্ছে ---
+            if(noticeElement) noticeElement.classList.remove('hidden');
+        });
     }
     uploadAgainBtn.addEventListener('click', () => { closeModal('fileErrorModal'); if(activeFileInput) { activeFileInput.click(); } });
 
@@ -1710,7 +1955,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = info.name || 'নামবিহীন প্রতিষ্ঠান';
         currentInstitutionNameEl.textContent = name;
 
-        isInstitutionInfoSaved = !!(info.name && info.name.trim() !== '' && info.address && info.address.trim() !== '' && info.number && info.number.trim() !== '');
+        isInstitutionInfoSaved = !!(info.name && info.name.trim() !== '');
 
         if (isInstitutionInfoSaved) {
             headerDetailsContainer.innerHTML = `<h1>${name}</h1><p>${info.address || ''}</p><p>${info.number ? `ফোন: ${info.number}` : ''}</p>`;
@@ -1731,14 +1976,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 institutionNumberInput.value = info.number ? convertToEnglishDigits(info.number) : '';
                 institutionAdviceInput.value = info.advice || ''; institutionConclusionInput.value = info.conclusion || '';
                 institutionLogoUrl = info.logoUrl || null;
+                const logoNotice = document.querySelector('#logoFileDropArea').closest('.form-group').querySelector('.file-upload-notice');
                 if (institutionLogoUrl) {
                     document.getElementById('logoPreview').src = institutionLogoUrl;
                     document.getElementById('logoPreviewContainer').classList.remove('hidden');
                     document.getElementById('logoFileDropArea').classList.add('hidden');
+                    if(logoNotice) logoNotice.classList.add('hidden');
                 } else {
                     document.getElementById('logoPreviewContainer').classList.add('hidden');
                     document.getElementById('logoFileDropArea').classList.remove('hidden');
                     document.getElementById('institutionLogoInput').value = '';
+                    if(logoNotice) logoNotice.classList.remove('hidden');
                 }
                 updateHeaderUI(info);
             } else {
@@ -1747,6 +1995,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('logoPreviewContainer').classList.add('hidden');
                 document.getElementById('logoFileDropArea').classList.remove('hidden');
                 document.getElementById('institutionLogoInput').value = '';
+                const logoNotice = document.querySelector('#logoFileDropArea').closest('.form-group').querySelector('.file-upload-notice');
+                if(logoNotice) logoNotice.classList.remove('hidden');
                 updateHeaderUI({ name: '' });
             }
         } catch(error) { console.error("Error loading institution info: ", error); showToast('প্রতিষ্ঠানের তথ্য লোড করা সম্ভব হয়নি।', 'error'); }
@@ -1754,10 +2004,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function validateInstitutionForm() {
         let isValid = true;
+        // --- পরিবর্তন: শুধুমাত্র প্রতিষ্ঠানের নাম যাচাই করা হচ্ছে ---
         const fields = [
-            { input: institutionNameInput, msg: 'অনুগ্রহ করে প্রতিষ্ঠানের নাম লিখুন।' },
-            { input: institutionAddressInput, msg: 'অনুগ্রহ করে প্রতিষ্ঠানের ঠিকানা লিখুন।' },
-            { input: institutionNumberInput, msg: 'অনুগ্রহ করে ফোন নম্বর লিখুন।' }
+            { input: institutionNameInput, msg: 'অনুগ্রহ করে প্রতিষ্ঠানের নাম লিখুন।' }
         ];
 
         fields.forEach(field => {
@@ -1776,7 +2025,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     saveInstitutionBtn.addEventListener('click', async () => {
         if (!validateInstitutionForm()) {
-            showToast('অনুগ্রহ করে সকল তথ্য পূরণ করুন।', 'error');
+            showToast('অনুগ্রহ করে প্রতিষ্ঠানের নাম পূরণ করুন।', 'error');
             return;
         }
 
@@ -1827,10 +2076,9 @@ document.addEventListener('DOMContentLoaded', () => {
             institutionContent.classList.remove('active');
             institutionHeaderEl.classList.remove('active');
 
-            // --- প্রথম সংশোধন: স্লাইড-আপ অ্যানিমেশনের পর ফরম পর্যন্ত স্ক্রল করা ---
             setTimeout(() => {
                 form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 750); // 0.7s transition এর জন্য 750ms দেয়া হলো
+            }, 750); 
 
             await loadAllData();
         } catch(error) { console.error("Error saving institution info:", error); showToast('তথ্য সেভ করতে সমস্যা হয়েছে।', 'error');
@@ -1842,6 +2090,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Dynamic Form Logic for ALL Fields ---
     async function loadFormConfiguration(institutionId) {
+        const defaultStudentFields = [
+            { id: "studentName", label: "শিক্ষার্থীর নাম", type: "text", enabled: true, required: true, order: 1 },
+            { id: "fatherName", label: "পিতার নাম", type: "text", enabled: true, required: true, order: 2 },
+            { id: "studentAddress", label: "ঠিকানা", type: "text", enabled: true, required: true, order: 3 },
+            { id: "dateOfBirth", label: "জন্ম তারিখ", type: "text", enabled: true, required: false, order: 4 },
+            { id: "bloodGroup", label: "রক্তের গ্রুপ", type: "text", enabled: true, required: false, order: 5 },
+            { id: "studentMobile", label: "মোবাইল নম্বর", type: "tel", enabled: true, required: false, order: 6 },
+            { id: "studentPhoto", label: "শিক্ষার্থীর ছবি", type: "file", enabled: true, required: false, order: 7 }
+        ];
+        
         if (!institutionId) {
             formConfiguration = {
                 institutionFields: [
@@ -1852,13 +2110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     { id: "institutionAdvice", label: "উপদেশ বা বাণী:", enabled: false },
                     { id: "institutionConclusion", label: "কি সমাপনী:", enabled: false }
                 ],
-                studentFields: [
-                    { id: "studentName", label: "শিক্ষার্থীর নাম", type: "text", enabled: true, required: true, order: 1 },
-                    { id: "fatherName", label: "পিতার নাম", type: "text", enabled: true, required: true, order: 2 },
-                    { id: "studentAddress", label: "ঠিকানা", type: "text", enabled: true, required: true, order: 3 },
-                    { id: "studentMobile", label: "মোবাইল নম্বর", type: "tel", enabled: true, required: false, order: 4 },
-                    { id: "studentPhoto", label: "শিক্ষার্থীর ছবি", type: "file", enabled: true, required: false, order: 5 }
-                ]
+                studentFields: defaultStudentFields
             };
             renderAllControlledFields();
             return;
@@ -1881,17 +2133,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         { id: "institutionAdvice", label: "উপদেশ বা বাণী:", enabled: false },
                         { id: "institutionConclusion", label: "কি সমাপনী:", enabled: false }
                     ],
-                    studentFields: data && data.formFields ? data.formFields : [
-                        { id: "studentName", label: "শিক্ষার্থীর নাম", type: "text", enabled: true, required: true, order: 1 },
-                        { id: "fatherName", label: "পিতার নাম", type: "text", enabled: true, required: true, order: 2 },
-                        { id: "studentAddress", label: "ঠিকানা", type: "text", enabled: true, required: true, order: 3 },
-                        { id: "studentMobile", label: "মোবাইল নম্বর", type: "tel", enabled: true, required: false, order: 4 },
-                        { id: "studentPhoto", label: "শিক্ষার্থীর ছবি", type: "file", enabled: true, required: false, order: 5 }
-                    ]
+                    studentFields: data && data.formFields ? data.formFields : defaultStudentFields
                 };
-                if (!formConfiguration.studentFields.some(f => f.id === 'studentPhoto')) {
-                    formConfiguration.studentFields.push({ id: "studentPhoto", label: "শিক্ষার্থীর ছবি", type: "file", enabled: true, required: false, order: 99 });
-                }
+                 // Ensure all default fields are present
+                defaultStudentFields.forEach(defaultField => {
+                    if (!formConfiguration.studentFields.some(f => f.id === defaultField.id)) {
+                        formConfiguration.studentFields.push(defaultField);
+                    }
+                });
             }
             renderAllControlledFields();
         } catch (error) {
@@ -1924,16 +2173,30 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!field.enabled) return;
             const requiredStar = field.required ? '<span class="required-star">*</span>' : '';
             const requiredAttr = field.required ? 'required' : '';
+            const readonlyAttr = (field.id === 'dateOfBirth' || field.id === 'bloodGroup') ? 'readonly' : '';
             const inputClass = field.type === 'tel' ? 'lang-input-num' : 'lang-input';
             const fieldHtml = `
                 <div class="form-group" data-field-id="${field.id}">
                     <label for="${field.id}">${field.label}:${requiredStar}</label>
-                    <input type="${field.type}" id="${field.id}" name="${field.id}" class="${inputClass}" ${requiredAttr}>
+                    <input type="${field.type}" id="${field.id}" name="${field.id}" class="${inputClass}" ${requiredAttr} ${readonlyAttr}>
                     <div class="validation-message"></div>
                 </div>
             `;
             container.innerHTML += fieldHtml;
         });
+
+        const dateOfBirthInput = document.getElementById('dateOfBirth');
+        if (dateOfBirthInput) {
+            dateOfBirthInput.addEventListener('click', () => {
+                initializeDatePicker();
+                openModal('datePickerModal');
+            });
+        }
+        const bloodGroupInput = document.getElementById('bloodGroup');
+        if (bloodGroupInput) {
+            bloodGroupInput.addEventListener('click', () => openModal('bloodGroupModal'));
+        }
+
 
         const currentLang = localStorage.getItem(languageKey) || 'bn';
         applyLanguageRestriction(currentLang);
@@ -2034,7 +2297,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (field.type === 'tel') {
                     value = convertDigits(value, currentUiLang);
                 }
-                detailsHtml += `<p class="${detailsFontClass}"><strong>${field.label}:</strong> ${value}</p>`;
+                if (field.id === 'bloodGroup') {
+                    detailsHtml += `<p class="font-arial"><strong>${field.label}:</strong> ${value}</p>`;
+                } else {
+                    detailsHtml += `<p class="${detailsFontClass}"><strong>${field.label}:</strong> ${value}</p>`;
+                }
             });
 
             const listItem = document.createElement('li');
@@ -2134,7 +2401,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showConfirmationModal({
                 iconClass: 'fas fa-exclamation-triangle', title: 'সতর্কতা',
                 message: 'শিক্ষার্থীর তথ্য সংরক্ষণ করার পূর্বে, অনুগ্রহ করে আপনার প্রতিষ্ঠানের সকল তথ্য পূরণ করে সেভ করুন।',
-                confirmText: 'ঠিক আছে', cancelBtnHidden: true, action: { type: 'closeOnly' }
+                confirmText: 'ঠিক আছে', cancelBtnHidden: true, action: { type: 'guideToInstitutionForm' }
             });
             return;
         }
@@ -2427,13 +2694,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (editIdInput.value === actionToExecute.id) resetFormState();
                 await loadSubmissions(institutionId, classId);
             } catch(error) { console.error("Delete error: ", error); showToast('তথ্য মুছতে সমস্যা হয়েছে।', 'error'); }
-        } else if (actionToExecute.type === 'guideToInstitutionForm') { // --- দ্বিতীয় সংশোধন: নতুন প্রতিষ্ঠান যোগ করার পর তথ্য পূরণ সেকশনে নিয়ে আসা ---
+        } else if (actionToExecute.type === 'guideToInstitutionForm') { // --- পরিবর্তন: এখানে কার্যকারিতা যুক্ত করা হয়েছে ---
             closeModal('confirmationModal');
-            institutionInfoSection.scrollIntoView({ behavior: 'smooth' });
-            if (!institutionContent.classList.contains('active')) {
-                institutionContent.classList.add('active');
-                institutionHeaderEl.classList.add('active');
-            }
+            institutionInfoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Add a small delay to ensure scrolling starts before opening the accordion
+            setTimeout(() => {
+                if (!institutionContent.classList.contains('active')) {
+                    institutionContent.classList.add('active');
+                    institutionHeaderEl.classList.add('active');
+                }
+            }, 300); // 300ms delay
         } else if (actionToExecute.type === 'closeOnly') {
              closeModal('confirmationModal');
         }
@@ -2539,17 +2809,139 @@ document.addEventListener('DOMContentLoaded', () => {
         closeModal('languageModal');
         showToast({bn: 'ভাষা বাংলায় পরিবর্তন করা হয়েছে।', en: 'Language changed to English.', ar: 'تم تغيير اللغة إلى العربية.'}[lang]);
     }
-
-    institutionHeaderEl.addEventListener('click', () => {
-        institutionContent.classList.toggle('active'); institutionHeaderEl.classList.toggle('active');
+    
+    document.querySelectorAll('.blood-group-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const selectedGroup = btn.dataset.group;
+            const bloodGroupInput = document.getElementById('bloodGroup');
+            if (bloodGroupInput) {
+                bloodGroupInput.value = selectedGroup;
+            }
+            closeModal('bloodGroupModal');
+        });
     });
 
-    document.addEventListener('click', (e) => {
-        const isClickInside = institutionInfoSection.contains(e.target);
-        if (!isClickInside && institutionContent.classList.contains('active')) {
-            institutionContent.classList.remove('active');
-            institutionHeaderEl.classList.remove('active');
+    // --- পরিবর্তন: জন্ম তারিখের সম্পূর্ণ নতুন কার্যকারিতা ---
+    const bnMonths = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
+    const bnWeekdays = ['রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহ', 'শুক্র', 'শনি'];
+
+    function initializeDatePicker() {
+        datePickerState.currentView = 'day';
+        datePickerState.displayDate = new Date(); // Always start with today's date context
+        datePickerState.selectedDate = { day: null, month: null, year: null }; // Reset selection
+        renderDatePicker();
+    }
+
+    function renderDatePicker() {
+        switch (datePickerState.currentView) {
+            case 'day': renderDayView(); break;
+            case 'month': renderMonthView(); break;
+            case 'year': renderYearView(); break;
         }
+    }
+
+    function renderDayView() {
+        const year = datePickerState.displayDate.getFullYear();
+        const month = datePickerState.displayDate.getMonth();
+        
+        const firstDayOfMonth = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        let header = `
+            <div class="datepicker-header">
+                <span class="datepicker-title">তারিখ নির্বাচন করুন</span>
+            </div>`;
+        
+        let weekdaysHtml = `<div class="calendar-grid">` + bnWeekdays.map(day => `<div class="calendar-day-name">${day}</div>`).join('');
+
+        let daysHtml = '';
+        for (let i = 0; i < firstDayOfMonth; i++) {
+            daysHtml += `<div class="calendar-day other-month"></div>`;
+        }
+        for (let i = 1; i <= daysInMonth; i++) {
+            daysHtml += `<div class="calendar-day" data-day="${i}">${convertDigits(i.toString(), 'bn')}</div>`;
+        }
+        daysHtml += '</div>';
+        datePickerContainer.innerHTML = header + weekdaysHtml + daysHtml;
+
+        datePickerContainer.querySelectorAll('.calendar-day:not(.other-month)').forEach(dayEl => {
+            dayEl.addEventListener('click', () => {
+                datePickerState.selectedDate.day = parseInt(dayEl.dataset.day);
+                datePickerState.currentView = 'month';
+                renderDatePicker();
+            });
+        });
+    }
+
+    function renderMonthView() {
+        let header = `
+            <div class="datepicker-header">
+                <button class="datepicker-back-btn" id="backToDayView"><i class="fas fa-arrow-left"></i></button>
+                <span class="datepicker-title">মাস নির্বাচন করুন</span>
+            </div>`;
+            
+        let monthsHtml = `<div class="month-grid">` + bnMonths.map((month, index) =>
+            `<div class="month-item" data-month="${index}">${month}</div>`
+        ).join('') + `</div>`;
+        datePickerContainer.innerHTML = header + monthsHtml;
+
+        document.getElementById('backToDayView').addEventListener('click', () => {
+            datePickerState.currentView = 'day';
+            renderDatePicker();
+        });
+
+        datePickerContainer.querySelectorAll('.month-item').forEach(monthEl => {
+            monthEl.addEventListener('click', () => {
+                datePickerState.selectedDate.month = parseInt(monthEl.dataset.month);
+                datePickerState.currentView = 'year';
+                renderDatePicker();
+            });
+        });
+    }
+
+    function renderYearView() {
+        const currentYear = new Date().getFullYear();
+        let header = `
+            <div class="datepicker-header">
+                <button class="datepicker-back-btn" id="backToMonthView"><i class="fas fa-arrow-left"></i></button>
+                <span class="datepicker-title">সাল নির্বাচন করুন</span>
+            </div>`;
+
+        let yearsHtml = '<div class="year-grid">';
+        for (let i = currentYear; i >= currentYear - 100; i--) {
+            yearsHtml += `<div class="year-item" data-year="${i}">${convertDigits(i.toString(), 'bn')}</div>`;
+        }
+        yearsHtml += '</div>';
+        datePickerContainer.innerHTML = header + yearsHtml;
+        
+        document.getElementById('backToMonthView').addEventListener('click', () => {
+            datePickerState.currentView = 'month';
+            renderDatePicker();
+        });
+
+        datePickerContainer.querySelectorAll('.year-item').forEach(yearEl => {
+            yearEl.addEventListener('click', () => {
+                datePickerState.selectedDate.year = parseInt(yearEl.dataset.year);
+
+                const { day, month, year } = datePickerState.selectedDate;
+                if(day === null || month === null || year === null) return; // safety check
+
+                const formattedDay = String(day).padStart(2, '0');
+                const formattedMonth = String(month + 1).padStart(2, '0');
+                const finalDate = `${convertDigits(formattedDay, 'bn')}-${convertDigits(formattedMonth, 'bn')}-${convertDigits(String(year), 'bn')}`;
+                
+                const dateOfBirthInput = document.getElementById('dateOfBirth');
+                if (dateOfBirthInput) {
+                    dateOfBirthInput.value = finalDate;
+                }
+                closeModal('datePickerModal');
+            });
+        });
+    }
+
+    // Event listeners
+    institutionHeaderEl.addEventListener('click', () => {
+        institutionContent.classList.toggle('active'); institutionHeaderEl.classList.toggle('active');
     });
 
     document.getElementById('toggleViewBtn').addEventListener('click', () => {
@@ -2557,6 +2949,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     allModalCloseBtns.forEach(btn => btn.addEventListener('click', () => closeModal(btn.dataset.modalId)));
+    
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal(modal.id);
+            }
+        });
+    });
+
     modalCancel.addEventListener('click', () => closeModal('confirmationModal'));
     languageBtn.addEventListener('click', () => openModal('languageModal'));
 
