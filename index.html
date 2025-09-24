@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -349,32 +350,66 @@
         z-index: 10;
     }
 
+    /* --- পরিবর্তন: আপলোড প্রগ্রেস বারের নতুন স্টাইল --- */
     .progress-bar-wrapper {
         width: 100%;
-        height: 12px;
+        height: 18px; /* Slightly thicker bar */
         background-color: #e2e8f0;
-        border-radius: 6px;
+        border-radius: 9px;
         overflow: hidden;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
+        position: relative; /* For positioning text inside */
     }
 
     .progress-bar {
         height: 100%;
         width: 0;
         background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-        border-radius: 6px;
-        transition: width 0.3s ease;
+        border-radius: 9px;
+        transition: width 0.4s ease; /* Smoother transition */
+        /* --- নতুন পরিবর্তন: প্রগ্রেস টেক্সট সেন্টারিং এবং ওভারফ্লো --- */
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .progress-bar.success {
         background: var(--success-color);
     }
-
+    
+    /* --- নতুন পরিবর্তন: প্রগ্রেস টেক্সটের জন্য নতুন স্টাইল --- */
     .progress-text {
-        font-weight: 600;
-        font-size: 1rem;
+        font-weight: 700;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    .progress-text.black {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         color: var(--dark-text);
     }
+    
+    .progress-text.white {
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+
+    .progress-details-text {
+        font-weight: 500;
+        font-size: 0.85rem;
+        color: var(--dark-text);
+    }
+
 
     input[type="file"] {
         display: none;
@@ -1445,7 +1480,7 @@
             <div class="content" id="institution-content">
                 <div style="padding-top: 20px;"> <!-- Added padding wrapper -->
                     <div class="form-group" data-field-id="institutionName">
-                        <label for="institutionName">প্রতিষ্ঠানের নাম:<span class="required-star">*</span></label>
+                        <label for="institutionName">প্রতিষ্ঠানের নাম:</label>
                         <input type="text" id="institutionName" name="institutionName">
                         <div class="validation-message">অনুগ্রহ করে প্রতিষ্ঠানের নাম লিখুন।</div>
                     </div>
@@ -1462,11 +1497,15 @@
                     <div class="form-group" data-field-id="institutionLogo">
                         <label for="institutionLogo">প্রতিষ্ঠানের লোগো:</label>
                         <label class="file-input-label" for="institutionLogoInput" id="logoFileDropArea">
+                            <!-- --- পরিবর্তন: আপলোড প্রগ্রেস বারের নতুন গঠন --- -->
                             <div class="progress-container hidden">
                                 <div class="progress-bar-wrapper">
-                                    <div class="progress-bar"></div>
+                                    <div class="progress-bar">
+                                        <span class="progress-text white">0%</span>
+                                    </div>
+                                    <span class="progress-text black">0%</span>
                                 </div>
-                                <span class="progress-text">0%</span>
+                                <span class="progress-details-text"></span>
                             </div>
                             <i class="fas fa-cloud-arrow-up upload-icon"></i>
                             <div class="upload-text-container">
@@ -1507,11 +1546,15 @@
             <div class="form-group" data-field-id="studentPhoto">
                 <label for="studentPhoto">শিক্ষার্থীর ছবি:</label>
                 <label class="file-input-label" for="studentPhotoInput" id="photoFileDropArea">
+                     <!-- --- পরিবর্তন: আপলোড প্রগ্রেস বারের নতুন গঠন --- -->
                      <div class="progress-container hidden">
                         <div class="progress-bar-wrapper">
-                            <div class="progress-bar"></div>
+                             <div class="progress-bar">
+                                <span class="progress-text white">0%</span>
+                            </div>
+                            <span class="progress-text black">0%</span>
                         </div>
-                        <span class="progress-text">0%</span>
+                        <span class="progress-details-text"></span>
                     </div>
                     <i class="fas fa-cloud-arrow-up upload-icon"></i>
                     <div class="upload-text-container">
@@ -1670,12 +1713,18 @@ document.addEventListener('DOMContentLoaded', () => {
         studentFields: []
     };
     let isInstitutionInfoSaved = false;
+    
+    // --- NEW: Real-time listener unsubscribers ---
+    let unsubscribeInstitutionListener = null;
+    let unsubscribeFormConfigListener = null;
+    let unsubscribeClassesListener = null;
 
     // --- পরিবর্তন: জন্ম তারিখ পপআপের নতুন স্টেট ---
     let datePickerState = {
         currentView: 'day', // 'day', 'month', 'year'
         displayDate: new Date(),
-        selectedDate: { day: null, month: null, year: null }
+        selectedDate: { day: null, month: null, year: null },
+        activeInputField: null // To store which input triggered the picker
     };
 
 
@@ -1719,6 +1768,22 @@ document.addEventListener('DOMContentLoaded', () => {
         applyLanguageRestriction(localStorage.getItem(languageKey) || 'bn');
         updateInputFonts(localStorage.getItem(languageKey) || 'bn');
     }
+    
+    // --- NEW: Function to clean up old listeners ---
+    function cleanupListeners() {
+        if (unsubscribeInstitutionListener) {
+            unsubscribeInstitutionListener();
+            unsubscribeInstitutionListener = null;
+        }
+        if (unsubscribeFormConfigListener) {
+            unsubscribeFormConfigListener();
+            unsubscribeFormConfigListener = null;
+        }
+        if (unsubscribeClassesListener) {
+            unsubscribeClassesListener();
+            unsubscribeClassesListener = null;
+        }
+    }
 
     async function loadUserAndInstitutionData() {
         const userInfo = JSON.parse(localStorage.getItem(userLoginKey));
@@ -1742,6 +1807,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function loadAllData() {
+        cleanupListeners(); // --- NEW: Clean up old listeners before setting new ones
+        
         const institutionId = localStorage.getItem(currentInstitutionKey);
         const classId = localStorage.getItem(currentClassKey);
 
@@ -1856,7 +1923,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const removeBtn = document.getElementById(removeBtnId);
         const progressContainer = dropArea.querySelector('.progress-container');
         const progressBar = dropArea.querySelector('.progress-bar');
-        const progressText = dropArea.querySelector('.progress-text');
+        // --- পরিবর্তন: এখন দুটি টেক্সট এলিমেন্ট ধরা হচ্ছে ---
+        const progressTexts = dropArea.querySelectorAll('.progress-text');
+        const progressDetailsText = dropArea.querySelector('.progress-details-text');
         const noticeElement = dropArea.closest('.form-group').querySelector('.file-upload-notice');
 
 
@@ -1878,7 +1947,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     processedFile = await imageCompression(file, { maxSizeMB: 1, maxWidthOrHeight: 1280, useWebWorker: true });
                 } catch (error) { console.error('Image compression error:', error); }
             }
-            progressContainer.classList.remove('hidden'); progressBar.style.width = '0%'; progressBar.classList.remove('success'); progressText.textContent = '0%';
+            progressContainer.classList.remove('hidden'); progressBar.style.width = '0%'; progressBar.classList.remove('success');
+            // --- পরিবর্তন: দুটি টেক্সট এলিমেন্ট রিসেট করা হচ্ছে ---
+            progressTexts.forEach(el => el.textContent = '0%');
+            progressDetailsText.textContent = '';
+            
             const uploadPromise = new Promise((resolve, reject) => {
                 const formData = new FormData();
                 formData.append('file', processedFile); formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
@@ -1888,21 +1961,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (event.lengthComputable) {
                         const percentComplete = Math.round((event.loaded / event.total) * 100);
                         progressBar.style.width = percentComplete + '%';
-                        // --- পরিবর্তন: আপলোডের বিস্তারিত তথ্য দেখানো হচ্ছে ---
-                        progressText.textContent = `${percentComplete}% (${formatBytes(event.loaded)} / ${formatBytes(event.total)})`;
+                        // --- পরিবর্তন: দুটি টেক্সট এলিমেন্ট আপডেট করা হচ্ছে ---
+                        progressTexts.forEach(el => el.textContent = `${percentComplete}%`);
+                        progressDetailsText.textContent = `${formatBytes(event.loaded)} / ${formatBytes(event.total)}`;
                     }
                 };
                 xhr.onload = () => {
                     if (xhr.status === 200) {
                         const response = JSON.parse(xhr.responseText);
                         onUrlReady(response.secure_url);
-                        progressBar.classList.add('success'); progressText.textContent = 'সফলভাবে সম্পন্ন!';
+                        progressBar.classList.add('success');
+                        // --- পরিবর্তন: দুটি টেক্সট এলিমেন্ট আপডেট করা হচ্ছে ---
+                        progressTexts.forEach(el => el.textContent = 'সম্পন্ন!');
+
                         const reader = new FileReader();
                         reader.onload = (e) => {
                             previewImg.src = e.target.result;
                             previewContainer.classList.remove('hidden'); 
                             dropArea.classList.add('hidden');
-                            // --- পরিবর্তন: প্রিভিউ দেখানোর পর নোটিশ লুকানো হচ্ছে ---
                             if(noticeElement) noticeElement.classList.add('hidden');
                         };
                         reader.readAsDataURL(processedFile);
@@ -1932,7 +2008,6 @@ document.addEventListener('DOMContentLoaded', () => {
             input.value = ''; 
             onUrlReady(null); 
             setUploadPromise(null); 
-            // --- পরিবর্তন: ছবি সরানোর পর নোটিশ আবার দেখানো হচ্ছে ---
             if(noticeElement) noticeElement.classList.remove('hidden');
         });
     }
@@ -1968,13 +2043,16 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadInstitutionInfo(institutionId) {
         if (!institutionId) return;
         const docRef = db.collection('institutions').doc(institutionId);
-        try {
-            const doc = await docRef.get();
+        
+        // --- MODIFIED: Using onSnapshot for real-time updates ---
+        unsubscribeInstitutionListener = docRef.onSnapshot(doc => {
             if (doc.exists) {
                 const info = doc.data();
-                institutionNameInput.value = info.name || ''; institutionAddressInput.value = info.address || '';
+                institutionNameInput.value = info.name || ''; 
+                institutionAddressInput.value = info.address || '';
                 institutionNumberInput.value = info.number ? convertToEnglishDigits(info.number) : '';
-                institutionAdviceInput.value = info.advice || ''; institutionConclusionInput.value = info.conclusion || '';
+                institutionAdviceInput.value = info.advice || ''; 
+                institutionConclusionInput.value = info.conclusion || '';
                 institutionLogoUrl = info.logoUrl || null;
                 const logoNotice = document.querySelector('#logoFileDropArea').closest('.form-group').querySelector('.file-upload-notice');
                 if (institutionLogoUrl) {
@@ -1990,6 +2068,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 updateHeaderUI(info);
             } else {
+                // Handle case where institution might be deleted
                 institutionNameInput.value = ''; institutionAddressInput.value = ''; institutionNumberInput.value = '';
                 institutionAdviceInput.value = ''; institutionConclusionInput.value = ''; institutionLogoUrl = null;
                 document.getElementById('logoPreviewContainer').classList.add('hidden');
@@ -1999,33 +2078,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(logoNotice) logoNotice.classList.remove('hidden');
                 updateHeaderUI({ name: '' });
             }
-        } catch(error) { console.error("Error loading institution info: ", error); showToast('প্রতিষ্ঠানের তথ্য লোড করা সম্ভব হয়নি।', 'error'); }
+        }, error => {
+            console.error("Error with real-time institution listener: ", error);
+            showToast('প্রতিষ্ঠানের তথ্য সিঙ্ক করতে সমস্যা হয়েছে।', 'error');
+        });
     }
 
+    // --- MODIFIED: Dynamic validation based on formConfiguration ---
     function validateInstitutionForm() {
         let isValid = true;
-        // --- পরিবর্তন: শুধুমাত্র প্রতিষ্ঠানের নাম যাচাই করা হচ্ছে ---
-        const fields = [
-            { input: institutionNameInput, msg: 'অনুগ্রহ করে প্রতিষ্ঠানের নাম লিখুন।' }
-        ];
+        if (!formConfiguration || !formConfiguration.institutionFields) return true;
 
-        fields.forEach(field => {
-            const validationMessageEl = field.input.nextElementSibling;
-            if (field.input.value.trim() === '') {
-                validationMessageEl.textContent = field.msg;
-                validationMessageEl.style.display = 'block';
-                isValid = false;
-            } else {
-                validationMessageEl.style.display = 'none';
+        formConfiguration.institutionFields.forEach(field => {
+            if (field.enabled && field.required) {
+                const inputElement = document.getElementById(field.id);
+                const validationMessageEl = inputElement.nextElementSibling;
+                if (inputElement && inputElement.value.trim() === '') {
+                    validationMessageEl.textContent = `অনুগ্রহ করে ${field.label.replace(':', '')} লিখুন।`;
+                    validationMessageEl.style.display = 'block';
+                    isValid = false;
+                } else if (validationMessageEl) {
+                    validationMessageEl.style.display = 'none';
+                }
             }
         });
-
         return isValid;
     }
 
     saveInstitutionBtn.addEventListener('click', async () => {
         if (!validateInstitutionForm()) {
-            showToast('অনুগ্রহ করে প্রতিষ্ঠানের নাম পূরণ করুন।', 'error');
+            showToast('অনুগ্রহ করে সকল বাধ্যতামূলক তথ্য পূরণ করুন।', 'error');
             return;
         }
 
@@ -2069,7 +2151,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            updateHeaderUI(institutionData); institutionLogoUploadPromise = null;
+            // UI update is now handled by the real-time listener, but we can keep this for immediate feedback
+            updateHeaderUI(institutionData); 
+            institutionLogoUploadPromise = null;
             institutionManagerSection.classList.remove('hidden');
             showToast('প্রতিষ্ঠানের তথ্য সফলভাবে সেভ হয়েছে!', 'success');
 
@@ -2080,7 +2164,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 form.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 750); 
 
-            await loadAllData();
         } catch(error) { console.error("Error saving institution info:", error); showToast('তথ্য সেভ করতে সমস্যা হয়েছে।', 'error');
         } finally { saveInstitutionBtn.disabled = false; saveInstitutionBtn.innerHTML = `<i class="fas fa-building-shield"></i> প্রতিষ্ঠানের তথ্য সেভ করুন`; }
     });
@@ -2090,6 +2173,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Dynamic Form Logic for ALL Fields ---
     async function loadFormConfiguration(institutionId) {
+        const defaultInstitutionFields = [
+            { id: "institutionName", label: "প্রতিষ্ঠানের নাম:", enabled: true, required: true },
+            { id: "institutionAddress", label: "প্রতিষ্ঠানের ঠিকানা:", enabled: true, required: false },
+            { id: "institutionNumber", label: "প্রতিষ্ঠানের ফোন নম্বর:", enabled: true, required: false },
+            { id: "institutionLogo", label: "প্রতিষ্ঠানের লোগো:", enabled: true, required: false },
+            { id: "institutionAdvice", label: "উপদেশ বা বাণী:", enabled: false, required: false },
+            { id: "institutionConclusion", label: "কি সমাপনী:", enabled: false, required: false }
+        ];
+
         const defaultStudentFields = [
             { id: "studentName", label: "শিক্ষার্থীর নাম", type: "text", enabled: true, required: true, order: 1 },
             { id: "fatherName", label: "পিতার নাম", type: "text", enabled: true, required: true, order: 2 },
@@ -2102,14 +2194,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (!institutionId) {
             formConfiguration = {
-                institutionFields: [
-                    { id: "institutionName", label: "প্রতিষ্ঠানের নাম:", enabled: true },
-                    { id: "institutionAddress", label: "প্রতিষ্ঠানের ঠিকানা:", enabled: true },
-                    { id: "institutionNumber", label: "প্রতিষ্ঠানের ফোন নম্বর:", enabled: true },
-                    { id: "institutionLogo", label: "প্রতিষ্ঠানের লোগো:", enabled: true },
-                    { id: "institutionAdvice", label: "উপদেশ বা বাণী:", enabled: false },
-                    { id: "institutionConclusion", label: "কি সমাপনী:", enabled: false }
-                ],
+                institutionFields: defaultInstitutionFields,
                 studentFields: defaultStudentFields
             };
             renderAllControlledFields();
@@ -2117,43 +2202,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const docRef = db.collection('institutions').doc(institutionId);
-        try {
-            const doc = await docRef.get();
-            const data = doc.data();
+        
+        // --- MODIFIED: Using onSnapshot for real-time form updates ---
+        unsubscribeFormConfigListener = docRef.onSnapshot(doc => {
+            const data = doc.data() || {};
 
-            if (doc.exists && data && data.formConfiguration) {
+            if (data.formConfiguration) {
                 formConfiguration = data.formConfiguration;
             } else {
                 formConfiguration = {
-                    institutionFields: [
-                        { id: "institutionName", label: "প্রতিষ্ঠানের নাম:", enabled: true },
-                        { id: "institutionAddress", label: "প্রতিষ্ঠানের ঠিকানা:", enabled: true },
-                        { id: "institutionNumber", label: "প্রতিষ্ঠানের ফোন নম্বর:", enabled: true },
-                        { id: "institutionLogo", label: "প্রতিষ্ঠানের লোগো:", enabled: true },
-                        { id: "institutionAdvice", label: "উপদেশ বা বাণী:", enabled: false },
-                        { id: "institutionConclusion", label: "কি সমাপনী:", enabled: false }
-                    ],
-                    studentFields: data && data.formFields ? data.formFields : defaultStudentFields
+                    institutionFields: defaultInstitutionFields,
+                    studentFields: data.formFields || defaultStudentFields
                 };
-                 // Ensure all default fields are present
-                defaultStudentFields.forEach(defaultField => {
-                    if (!formConfiguration.studentFields.some(f => f.id === defaultField.id)) {
-                        formConfiguration.studentFields.push(defaultField);
-                    }
-                });
             }
+            
+            // Ensure all default fields are present if not in DB
+            defaultStudentFields.forEach(defaultField => {
+                if (!formConfiguration.studentFields.some(f => f.id === defaultField.id)) {
+                    formConfiguration.studentFields.push(defaultField);
+                }
+            });
+            defaultInstitutionFields.forEach(defaultField => {
+                if (!formConfiguration.institutionFields.some(f => f.id === defaultField.id)) {
+                    formConfiguration.institutionFields.push(defaultField);
+                }
+            });
+
             renderAllControlledFields();
-        } catch (error) {
-            console.error("Error loading form configuration:", error);
-            showToast('ফরম লোড করতে সমস্যা হয়েছে।', 'error');
-        }
+        }, error => {
+            console.error("Error with real-time form config listener:", error);
+            showToast('ফরম কনফিগারেশন সিঙ্ক করতে সমস্যা হয়েছে।', 'error');
+        });
     }
 
     function renderAllControlledFields() {
+        // --- MODIFIED: Handles institution fields dynamically, including required star ---
         formConfiguration.institutionFields.forEach(field => {
             const fieldElement = document.querySelector(`.form-group[data-field-id="${field.id}"]`);
             if (fieldElement) {
                 fieldElement.classList.toggle('hidden', !field.enabled);
+                const label = fieldElement.querySelector('label');
+                if (label) {
+                    let star = label.querySelector('.required-star');
+                    if (field.required && !star) {
+                        label.innerHTML += '<span class="required-star">*</span>';
+                    } else if (!field.required && star) {
+                        star.remove();
+                    }
+                }
             }
         });
 
@@ -2167,13 +2263,17 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = '';
 
         const studentTextFields = formConfiguration.studentFields.filter(f => f.id !== 'studentPhoto');
-        const sortedFields = [...studentTextFields].sort((a, b) => a.order - b.order);
+        const sortedFields = [...studentTextFields].sort((a, b) => (a.order || 99) - (b.order || 99));
 
         sortedFields.forEach(field => {
             if (!field.enabled) return;
             const requiredStar = field.required ? '<span class="required-star">*</span>' : '';
             const requiredAttr = field.required ? 'required' : '';
-            const readonlyAttr = (field.id === 'dateOfBirth' || field.id === 'bloodGroup') ? 'readonly' : '';
+            // --- MODIFIED: Dynamically make fields readonly ---
+            const isDatePicker = field.label && field.label.includes('জন্ম তারিখ');
+            const isBloodGroup = field.label && field.label.includes('রক্তের গ্রুপ');
+            const readonlyAttr = (isDatePicker || isBloodGroup) ? 'readonly' : '';
+            
             const inputClass = field.type === 'tel' ? 'lang-input-num' : 'lang-input';
             const fieldHtml = `
                 <div class="form-group" data-field-id="${field.id}">
@@ -2185,18 +2285,26 @@ document.addEventListener('DOMContentLoaded', () => {
             container.innerHTML += fieldHtml;
         });
 
-        const dateOfBirthInput = document.getElementById('dateOfBirth');
-        if (dateOfBirthInput) {
-            dateOfBirthInput.addEventListener('click', () => {
-                initializeDatePicker();
-                openModal('datePickerModal');
-            });
-        }
-        const bloodGroupInput = document.getElementById('bloodGroup');
-        if (bloodGroupInput) {
-            bloodGroupInput.addEventListener('click', () => openModal('bloodGroupModal'));
-        }
+        // --- MODIFIED: Dynamically attach event listeners based on label ---
+        sortedFields.forEach(field => {
+            if (!field.enabled) return;
+            const inputElement = document.getElementById(field.id);
+            if (!inputElement) return;
 
+            if (field.label && field.label.includes('জন্ম তারিখ')) {
+                inputElement.addEventListener('click', (e) => {
+                    initializeDatePicker(e.target);
+                    openModal('datePickerModal');
+                });
+            }
+            if (field.label && field.label.includes('রক্তের গ্রুপ')) {
+                inputElement.addEventListener('click', () => {
+                     // Store the active input to update its value later
+                    bloodGroupModal.dataset.activeInput = field.id;
+                    openModal('bloodGroupModal');
+                });
+            }
+        });
 
         const currentLang = localStorage.getItem(languageKey) || 'bn';
         applyLanguageRestriction(currentLang);
@@ -2210,21 +2318,24 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCurrentClassUI();
             return;
         }
-        try {
-            const snapshot = await db.collection('institutions').doc(institutionId).collection('classes').orderBy('name').get();
+        
+        const classesRef = db.collection('institutions').doc(institutionId).collection('classes').orderBy('name');
+
+        // --- MODIFIED: Using onSnapshot for real-time class updates ---
+        unsubscribeClassesListener = classesRef.onSnapshot(snapshot => {
             institutionClasses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
             let currentClassId = localStorage.getItem(currentClassKey);
-            if (!currentClassId || !institutionClasses.some(c => c.id === currentClassId)) {
+            if (currentClassId && !institutionClasses.some(c => c.id === currentClassId)) {
                 localStorage.removeItem(currentClassKey);
             }
-        } catch (error) {
+            updateCurrentClassUI();
+        }, error => {
             console.error("Error loading classes: ", error);
             institutionClasses = [];
             showToast('শ্রেণী তালিকা লোড করা যায়নি।', 'error');
-        } finally {
-             updateCurrentClassUI();
-        }
+            updateCurrentClassUI();
+        });
     }
 
     function updateCurrentClassUI() {
@@ -2289,15 +2400,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let detailsHtml = '';
             const studentNameField = formConfiguration.studentFields.find(f => f.id === 'studentName');
-            const displayName = studentNameField ? sub[studentNameField.id] || 'N/A' : 'N/A';
-            const sortedFields = [...formConfiguration.studentFields].sort((a, b) => a.order - b.order);
+            const displayName = studentNameField && sub[studentNameField.id] ? sub[studentNameField.id] : (sub.studentName || 'N/A');
+
+            const sortedFields = [...formConfiguration.studentFields].sort((a, b) => (a.order || 99) - (b.order || 99));
+
             sortedFields.forEach(field => {
                 if (!field.enabled || !sub[field.id] || field.type === 'file') return;
                 let value = sub[field.id];
                 if (field.type === 'tel') {
                     value = convertDigits(value, currentUiLang);
                 }
-                if (field.id === 'bloodGroup') {
+                const isBloodGroup = field.label && field.label.includes('রক্তের গ্রুপ');
+
+                if (isBloodGroup) {
                     detailsHtml += `<p class="font-arial"><strong>${field.label}:</strong> ${value}</p>`;
                 } else {
                     detailsHtml += `<p class="${detailsFontClass}"><strong>${field.label}:</strong> ${value}</p>`;
@@ -2677,6 +2792,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem(userLoginKey);
             localStorage.removeItem(currentInstitutionKey);
             localStorage.removeItem(currentClassKey);
+            cleanupListeners(); // --- NEW: Clean up listeners on logout ---
             window.location.reload();
         } else if (actionToExecute.type === 'delete') {
             closeModal('confirmationModal');
@@ -2694,10 +2810,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (editIdInput.value === actionToExecute.id) resetFormState();
                 await loadSubmissions(institutionId, classId);
             } catch(error) { console.error("Delete error: ", error); showToast('তথ্য মুছতে সমস্যা হয়েছে।', 'error'); }
-        } else if (actionToExecute.type === 'guideToInstitutionForm') { // --- পরিবর্তন: এখানে কার্যকারিতা যুক্ত করা হয়েছে ---
+        // --- পরিবর্তন: এখানে কার্যকারিতা যুক্ত করা হয়েছে ---
+        } else if (actionToExecute.type === 'guideToInstitutionForm') {
             closeModal('confirmationModal');
             institutionInfoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            // Add a small delay to ensure scrolling starts before opening the accordion
+            // একটি ছোট বিলম্ব যোগ করা হয়েছে যাতে স্ক্রোলিং শুরু হওয়ার পর অ্যাকর্ডিয়ান খোলে
             setTimeout(() => {
                 if (!institutionContent.classList.contains('active')) {
                     institutionContent.classList.add('active');
@@ -2813,22 +2930,27 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.blood-group-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const selectedGroup = btn.dataset.group;
-            const bloodGroupInput = document.getElementById('bloodGroup');
-            if (bloodGroupInput) {
-                bloodGroupInput.value = selectedGroup;
+            const activeInputId = bloodGroupModal.dataset.activeInput;
+            if (activeInputId) {
+                const bloodGroupInput = document.getElementById(activeInputId);
+                if (bloodGroupInput) {
+                    bloodGroupInput.value = selectedGroup;
+                }
             }
             closeModal('bloodGroupModal');
         });
     });
 
-    // --- পরিবর্তন: জন্ম তারিখের সম্পূর্ণ নতুন কার্যকারিতা ---
+    // --- MODIFIED: Date picker functionality enhancements ---
     const bnMonths = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
     const bnWeekdays = ['রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহ', 'শুক্র', 'শনি'];
 
-    function initializeDatePicker() {
+    function initializeDatePicker(inputElement) {
         datePickerState.currentView = 'day';
-        datePickerState.displayDate = new Date(); // Always start with today's date context
-        datePickerState.selectedDate = { day: null, month: null, year: null }; // Reset selection
+        // --- পরিবর্তন: ক্যালেন্ডার এখন সর্বদা বর্তমান বছরের জানুয়ারি মাস থেকে শুরু হবে ---
+        datePickerState.displayDate = new Date(new Date().getFullYear(), 0, 1); // Month is 0 for January
+        datePickerState.selectedDate = { day: null, month: null, year: null };
+        datePickerState.activeInputField = inputElement;
         renderDatePicker();
     }
 
@@ -2859,7 +2981,8 @@ document.addEventListener('DOMContentLoaded', () => {
             daysHtml += `<div class="calendar-day other-month"></div>`;
         }
         for (let i = 1; i <= daysInMonth; i++) {
-            daysHtml += `<div class="calendar-day" data-day="${i}">${convertDigits(i.toString(), 'bn')}</div>`;
+            const selectedClass = (i === datePickerState.selectedDate.day) ? 'selected' : '';
+            daysHtml += `<div class="calendar-day ${selectedClass}" data-day="${i}">${convertDigits(i.toString(), 'bn')}</div>`;
         }
         daysHtml += '</div>';
         datePickerContainer.innerHTML = header + weekdaysHtml + daysHtml;
@@ -2880,9 +3003,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="datepicker-title">মাস নির্বাচন করুন</span>
             </div>`;
             
-        let monthsHtml = `<div class="month-grid">` + bnMonths.map((month, index) =>
-            `<div class="month-item" data-month="${index}">${month}</div>`
-        ).join('') + `</div>`;
+        let monthsHtml = `<div class="month-grid">` + bnMonths.map((month, index) => {
+            const selectedClass = (index === datePickerState.selectedDate.month) ? 'selected' : '';
+            return `<div class="month-item ${selectedClass}" data-month="${index}">${month}</div>`;
+        }).join('') + `</div>`;
         datePickerContainer.innerHTML = header + monthsHtml;
 
         document.getElementById('backToDayView').addEventListener('click', () => {
@@ -2909,7 +3033,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let yearsHtml = '<div class="year-grid">';
         for (let i = currentYear; i >= currentYear - 100; i--) {
-            yearsHtml += `<div class="year-item" data-year="${i}">${convertDigits(i.toString(), 'bn')}</div>`;
+            const selectedClass = (i === datePickerState.selectedDate.year) ? 'selected' : '';
+            yearsHtml += `<div class="year-item ${selectedClass}" data-year="${i}">${convertDigits(i.toString(), 'bn')}</div>`;
         }
         yearsHtml += '</div>';
         datePickerContainer.innerHTML = header + yearsHtml;
@@ -2930,9 +3055,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const formattedMonth = String(month + 1).padStart(2, '0');
                 const finalDate = `${convertDigits(formattedDay, 'bn')}-${convertDigits(formattedMonth, 'bn')}-${convertDigits(String(year), 'bn')}`;
                 
-                const dateOfBirthInput = document.getElementById('dateOfBirth');
-                if (dateOfBirthInput) {
-                    dateOfBirthInput.value = finalDate;
+                if (datePickerState.activeInputField) {
+                    datePickerState.activeInputField.value = finalDate;
                 }
                 closeModal('datePickerModal');
             });
